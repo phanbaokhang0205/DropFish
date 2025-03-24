@@ -9,7 +9,7 @@ using UnityEngine;
  */
 public class PlayerController : MonoBehaviour
 {
-    //public GameObject line;
+    public GameObject line;
     //public GameObject fishTank;
 
     private FishManager fishManager;
@@ -17,8 +17,8 @@ public class PlayerController : MonoBehaviour
     private Touch touch;
 
     private int heightDrop;
-    //private Renderer rendLine;
-    //private Vector3 targetCenter;
+    private Renderer rendLine;
+    private Vector3 targetCenter;
 
     //fishTank
     //private CompositeCollider2D rendTank;
@@ -37,8 +37,9 @@ public class PlayerController : MonoBehaviour
         fishManager.CreateFish(touchPosition);
 
         ////line to drop fish
-        //rendLine = line.GetComponent<Renderer>();
-        //targetCenter = fishManager.chosenFish.GetComponent<Renderer>().bounds.center;
+        rendLine = line.GetComponent<Renderer>();
+        targetCenter = fishManager.chosenFish.GetComponent<Collider>().bounds.center;
+
 
         ////fishtank
         //rendTank = fishTank.GetComponent<CompositeCollider2D>();
@@ -47,7 +48,7 @@ public class PlayerController : MonoBehaviour
         //minTank = -(tankWidth / 2);
         //maxTank = tankWidth / 2;
 
-        //setLinePosition();
+        setLinePosition();
 
     }
 
@@ -69,8 +70,6 @@ public class PlayerController : MonoBehaviour
             }
             else if (touch.phase == TouchPhase.Moved)
             {
-                Debug.Log(touch.phase);
-
                 if (fishManager.fishScript.isDropped) return;
 
                 fishManager.MoveFish(touchPosition);
@@ -80,7 +79,7 @@ public class PlayerController : MonoBehaviour
             else if (touch.phase == TouchPhase.Ended)
             {
                 fishManager.DropFish();
-                //line.SetActive(false);
+                line.SetActive(false);
             }
 
         }
@@ -116,12 +115,12 @@ public class PlayerController : MonoBehaviour
 
     void setLinePosition()
     {
-        //float objectHeight = rendLine.bounds.size.y;
-        //Vector3 newLinePosition = line.transform.position;
-        //newLinePosition.y = targetCenter.y - (objectHeight / 2);
-        //newLinePosition.x = fishManager.chosenFish.transform.position.x;
-        //line.transform.position = newLinePosition;
-        //line.SetActive(true);
+        float objectHeight = rendLine.bounds.size.y;
+        Vector3 newLinePosition = line.transform.position;
+        newLinePosition.y = targetCenter.y - (objectHeight / 2);
+        newLinePosition.x = fishManager.chosenFish.transform.position.x;
+        line.transform.position = newLinePosition;
+        line.SetActive(true);
 
     }
 

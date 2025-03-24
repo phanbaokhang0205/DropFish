@@ -14,7 +14,6 @@ public class Fish : MonoBehaviour
         fishManager = FishManager.Instance;
 
         fishRb = gameObject.GetComponent<Rigidbody>();
-        Debug.Log(transform.position);
 
         inWater = false;
         isDropped = false;
@@ -33,30 +32,27 @@ public class Fish : MonoBehaviour
 
         fishRb.useGravity = false;
         transform.rotation = Quaternion.Euler(0, 90, 0);
-        fishRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 
     public void dropped()
     {
+        Debug.Log(this);
         isDropped = true;
         fishRb.useGravity = true;
         fishRb.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
     }
 
-    public void inActive()
-    {
-        Debug.Log(gameObject.tag+" Out");
-        inWater = false;
-        isDropped = false;
-        transform.rotation = Quaternion.Euler(0, 90, 0);
-        fishRb.constraints = RigidbodyConstraints.FreezePosition;
-    }
+    //public void inActive()
+    //{
+    //    inWater = false;
+    //    isDropped = false;
+    //    transform.rotation = Quaternion.Euler(0, 90, 0);
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "water")
         {
-            Debug.Log("In Water");
             inWater = true;
         }
     }
