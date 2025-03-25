@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Fish : MonoBehaviour
 {
+
     private FishManager fishManager;
     private Rigidbody fishRb;
 
@@ -56,6 +57,9 @@ public class Fish : MonoBehaviour
         if (other.gameObject.tag == "water")
         {
             inWater = true;
+            //splashEffect.transform.position = transform.position;
+            //splashEffect.Play();
+            //Debug.Log(splashEffect.transform.position);
         }
     }
 

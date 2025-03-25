@@ -10,6 +10,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject line;
+    public ParticleSystem splashEffect;
 
     private FishManager fishManager;
     private Vector3 touchPosition;
@@ -90,6 +91,11 @@ public class PlayerController : MonoBehaviour
 
             setLinePosition();
         }
+
+        if (fishManager.fishScript.inWater)
+        {
+            setsplashEffect();
+        }
     }
 
     void checkPosition()
@@ -121,6 +127,12 @@ public class PlayerController : MonoBehaviour
         line.transform.position = newLinePosition;
         line.SetActive(true);
 
+    }
+
+    void setsplashEffect()
+    {
+        splashEffect.transform.position = fishManager.chosenFish.transform.position;
+        splashEffect.Play();
     }
 
 }
