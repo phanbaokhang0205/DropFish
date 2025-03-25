@@ -7,7 +7,7 @@ public class FishPooler : MonoBehaviour
 
     public GameObject[] fishPrefabs;
     private Dictionary<int, Queue<GameObject>> fishPool = new Dictionary<int, Queue<GameObject>>();
-    private int poolSize = 5; // Số lượng cá mỗi level ban đầu trong pool
+    private int poolSize = 2; // Số lượng cá mỗi level ban đầu trong pool
 
     private void Awake()
     {
@@ -17,11 +17,14 @@ public class FishPooler : MonoBehaviour
     private void Start()
     {
         InitializePool();
+        foreach (var kvp in fishPool)
+        {
+            Debug.Log("Key: " + kvp.Key + ", Queue size: " + kvp.Value.Count);
+        }
     }
 
     private void InitializePool()
     {
-        // Tạo từ cá 1 -> cá 4
         for (int i = 0; i < 4; i++)
         {
             fishPool[i] = new Queue<GameObject>();
@@ -35,14 +38,15 @@ public class FishPooler : MonoBehaviour
         }
     }
 
-    public GameObject GetFish(Vector3 spawnPosition, int level)
+    public GameObject GetFish(Vector3 spawnPosition, int? level = null)
     {
-        int fishLevel = (level <= -1) ? Random.Range(0, 4) : level;
 
+        int fishLevel = level ?? Random.Range(0, 4);
 
         if (fishPool.ContainsKey(fishLevel) && fishPool[fishLevel].Count > 0)
         {
             GameObject fish = fishPool[fishLevel].Dequeue();
+            Debug.Log($"Số lượng cá level {fishLevel} sau khi lấy: {fishPool[fishLevel].Count}");
             fish.transform.position = spawnPosition;
             fish.SetActive(true);
             return fish;

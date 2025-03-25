@@ -15,39 +15,41 @@ public class Fish : MonoBehaviour
 
         fishRb = gameObject.GetComponent<Rigidbody>();
 
-        inWater = false;
-        isDropped = false;
-
         prepareToDrop();
     }
 
     void Update()
     {
-        //Debug.Log(transform.position);
+        if (inWater)
+        {
+            dropped();
+        }
     }
 
     public void prepareToDrop()
     {
         fishRb = GetComponent<Rigidbody>();
-
         fishRb.useGravity = false;
+        inWater = false;
+        isDropped = false;
         transform.rotation = Quaternion.Euler(0, 90, 0);
+        fishRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        fishRb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+
     }
 
     public void dropped()
     {
-        Debug.Log(this);
         isDropped = true;
         fishRb.useGravity = true;
         fishRb.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
     }
 
-    //public void inActive()
-    //{
-    //    inWater = false;
-    //    isDropped = false;
-    //    transform.rotation = Quaternion.Euler(0, 90, 0);
-    //}
+    public void setState()
+    {
+        prepareToDrop();
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -66,7 +68,6 @@ public class Fish : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         fishManager.MergeFish(gameObject, collision.gameObject);
-
     }
 
 

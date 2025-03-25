@@ -10,7 +10,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject line;
-    //public GameObject fishTank;
 
     private FishManager fishManager;
     private Vector3 touchPosition;
