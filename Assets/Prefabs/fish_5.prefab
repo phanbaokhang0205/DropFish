@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 5783949113461166715}
   - component: {fileID: 3644164111893887616}
   - component: {fileID: 3864292579432918885}
+  - component: {fileID: -6299722251796924410}
   m_Layer: 0
   m_Name: fish_5
   m_TagString: fish_5
@@ -60,8 +61,8 @@ Transform:
   m_GameObject: {fileID: 1878833846333448430}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.02, y: 3.43, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -2.97, y: 31.849998, z: 0}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7920125936789629642}
@@ -80,7 +81,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 223feb9878b6d6440a6ce18c1b573dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splashEffect: {fileID: 2028582089684394086, guid: cd35fe63cdef98e41bb3d79d8dd5fafc, type: 3}
   inWater: 0
   isDropped: 0
 --- !u!54 &3644164111893887616
@@ -127,10 +127,33 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &-6299722251796924410
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1878833846333448430}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.45840037
+  m_Height: 1.3176696
+  m_Direction: 2
+  m_Center: {x: 1.8666849e-16, y: 0.060508728, z: 0.07563561}
 --- !u!1 &2372389926830758025
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,12 +2,11 @@
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 /**
- * Tạo objectPooler để tối ưu khi tạo và xóa nhiều đối tượng.
- * Cơ chế: 
- *     Trong hàm Start, tạo sẵn 1 ds chứa các obj cần dùng (setActive = false)
- *  -> tạo hàm private GameObject GetFishFromPool() để mở các object cần sử dụng (setActive = true)
- *  -> cái nào không dùng nữa thì tắt nó đi (setActive = false).
+    * Bug:
+    * 1. Khi merge nhiều cá liên tục thì lỗi cá bị mất
  */
+
+
 public class FishManager : MonoBehaviour
 {
     public static FishManager Instance;
