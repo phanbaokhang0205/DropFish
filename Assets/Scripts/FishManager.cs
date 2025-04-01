@@ -3,7 +3,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 /**
     * Bug:
-    * 1. Khi merge nhiều cá liên tục thì lỗi cá bị mất
+    * 1. Khi merge nhiều cá liên tục thì lỗi cá bị mất (done)
  */
 
 
@@ -36,7 +36,6 @@ public class FishManager : MonoBehaviour
 
     public void CreateFish(Vector3 spawnPosition)
     {
-
         chosenFish = FishPooler.Instance.GetFish(spawnPosition, null);
         fishScript = chosenFish.GetComponent<Fish>();
         fishScript.prepareToDrop();
@@ -64,17 +63,19 @@ public class FishManager : MonoBehaviour
         if (collision1.tag == collision2.tag)
         {
             int level = GetFishLevel(collision1.tag) - 1;
-            Debug.Log("level của 2 con vừa rồi: " + level);
+            GameObject evolutionFish = collision1;
+            Debug.Log("level của 2 con vừa rồi: " + (level+1));
+
 
             if (collision1.transform.position.y > collision2.transform.position.y)
             {
-                collision1.GetComponent<Fish>().setState();
-                collision2.GetComponent<Fish>().setState();
+                collision1.GetComponent<Fish>().prepareToDrop();
+                collision2.GetComponent<Fish>().prepareToDrop();
                 FishPooler.Instance.ReturnFish(collision1, level);
                 FishPooler.Instance.ReturnFish(collision2, level);
                 
 
-                GameObject nextFish = FishPooler.Instance.GetFish(collision2.transform.position, level+1);
+                FishPooler.Instance.GetFish(evolutionFish.transform.position, level+1);
             }
         }
     }
@@ -82,6 +83,7 @@ public class FishManager : MonoBehaviour
     private int GetFishLevel(string tag)
     {
         string[] parts = tag.Split('_');
+        Debug.Log("Tag: " + int.Parse(parts[1]));
         return int.Parse(parts[1]);
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
@@ -11,7 +12,9 @@ public class PlayerController : MonoBehaviour
 {
     public GameObject line;
     public ParticleSystem splashEffect;
+    public GameObject water;
 
+    private GameManager gameManager;
     private FishManager fishManager;
     private Vector3 touchPosition;
     private Touch touch;
@@ -20,20 +23,33 @@ public class PlayerController : MonoBehaviour
     private Renderer rendLine;
     private Vector3 targetCenter;
 
+    private Coroutine createFishCoroutine;
+
     //fishTank
-    //private CompositeCollider2D rendTank;
-    //private float tankWidth;
-    //private float tankHeight;
-    //private float minTank;
-    //private float maxTank;
+    private Renderer waterSize;
+    private float waterHeight;
+    private float waterWidth;
+    private float leftSide;
+    private float rightSide;
 
     private void Start()
     {
+        gameManager = GameManager.Instance;
         fishManager = FishManager.Instance;
 
-        heightDrop = Screen.height / 2;
+        /// fish tank props
+        Vector3 waterScreenPos = Camera.main.WorldToScreenPoint(water.transform.position);
+        waterHeight = waterScreenPos.y * 2;
+        waterWidth = waterScreenPos.x;
 
-        touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, heightDrop, 10));
+        waterSize = water.GetComponent<Renderer>();
+        leftSide = Camera.main.WorldToScreenPoint(new Vector3(waterSize.bounds.min.x, 0, 0)).x;
+        rightSide = Camera.main.WorldToScreenPoint(new Vector3(waterSize.bounds.max.x, 0, 0)).x;
+        Debug.Log("min" + waterSize.bounds.min.x);
+        Debug.Log("max" + waterSize.bounds.max.x);
+
+        /// init position
+        touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(waterWidth, waterHeight, 10));
         fishManager.CreateFish(touchPosition);
 
         ////line to drop fish
@@ -41,12 +57,6 @@ public class PlayerController : MonoBehaviour
         targetCenter = fishManager.chosenFish.GetComponent<Collider>().bounds.center;
 
 
-        ////fishtank
-        //rendTank = fishTank.GetComponent<CompositeCollider2D>();
-        //tankWidth = rendTank.bounds.size.x - 3;
-        //tankHeight = rendTank.bounds.size.y;
-        //minTank = -(tankWidth / 2);
-        //maxTank = tankWidth / 2;
 
         setLinePosition();
 
@@ -58,7 +68,7 @@ public class PlayerController : MonoBehaviour
         if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
-            touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, heightDrop, 10));
+            touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, waterHeight, 10));
 
             if (touch.phase == TouchPhase.Began)
             {
@@ -72,23 +82,24 @@ public class PlayerController : MonoBehaviour
             {
                 if (fishManager.fishScript.isDropped) return;
 
+                Debug.Log(fishManager.chosenFish.transform.position.x);
                 fishManager.MoveFish(touchPosition);
                 checkPosition();
                 setLinePosition();
+
             }
             else if (touch.phase == TouchPhase.Ended)
             {
                 fishManager.DropFish();
                 line.SetActive(false);
             }
-
         }
 
         if (fishManager.chosenFish == null)
         {
-            touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, heightDrop, 10));
+            touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, waterHeight, 10));
             fishManager.CreateFish(touchPosition);
-
+            //createFishCoroutine = StartCoroutine(DelayCreateFish(touchPosition));
             setLinePosition();
         }
 
@@ -96,26 +107,31 @@ public class PlayerController : MonoBehaviour
         {
             setsplashEffect();
         }
+
+        // GameState
+        if (fishManager.chosenFish.transform.position.y < -5)
+        {
+            gameManager.onLose();
+        }
     }
 
     void checkPosition()
     {
+        /// world to screen
         Vector3 newPosition = fishManager.chosenFish.transform.position;
-
-        //if (newPosition.x <= minTank)
-        //{
-        //    newPosition.x = minTank;
-        //    fishManager.chosenFish.transform.position = newPosition;
-        //    Debug.Log("x: " + newPosition.x);
-
-        //}
-        //else if (newPosition.x >= maxTank)
-        //{
-        //    newPosition.x = maxTank;
-        //    fishManager.chosenFish.transform.position = newPosition;
-        //    Debug.Log("x: " + newPosition.x);
-
-        //}
+        float min = waterSize.bounds.min.x + 1;
+        float max = waterSize.bounds.max.x - 1;
+        /// screen to world
+        if (newPosition.x <= min)
+        {
+            newPosition.x = min;
+            fishManager.chosenFish.transform.position = newPosition;
+        }
+        else if (newPosition.x >= max)
+        {
+            newPosition.x = max;
+            fishManager.chosenFish.transform.position = newPosition;
+        }
     }
 
     void setLinePosition()
@@ -135,4 +151,9 @@ public class PlayerController : MonoBehaviour
         splashEffect.Play();
     }
 
+    IEnumerator DelayCreateFish(Vector3 touchPosition)
+    {
+        yield return new WaitForSeconds(1f);
+        fishManager.CreateFish(touchPosition);
+    }
 }

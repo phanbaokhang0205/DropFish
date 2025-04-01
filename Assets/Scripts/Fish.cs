@@ -30,12 +30,18 @@ public class Fish : MonoBehaviour
     public void prepareToDrop()
     {
         fishRb = GetComponent<Rigidbody>();
-        fishRb.useGravity = false;
         inWater = false;
         isDropped = false;
+        fishRb.useGravity = false;
         transform.rotation = Quaternion.Euler(0, 90, 0);
-        fishRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        fishRb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+        fishRb.constraints = 
+            RigidbodyConstraints.FreezePositionX |
+            RigidbodyConstraints.FreezePositionY |
+            RigidbodyConstraints.FreezePositionZ |
+            RigidbodyConstraints.FreezeRotationX | 
+            RigidbodyConstraints.FreezeRotationY | 
+            RigidbodyConstraints.FreezeRotationZ;
+        
 
     }
 
@@ -43,12 +49,9 @@ public class Fish : MonoBehaviour
     {
         isDropped = true;
         fishRb.useGravity = true;
-        fishRb.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
-    }
-
-    public void setState()
-    {
-        prepareToDrop();
+        fishRb.constraints =  RigidbodyConstraints.FreezePositionZ |
+                              RigidbodyConstraints.FreezeRotationZ |
+                              RigidbodyConstraints.FreezeRotationY;
     }
 
 
@@ -56,12 +59,9 @@ public class Fish : MonoBehaviour
     {
         if (other.gameObject.tag == "water")
         {
-            inWater = true;
-            //splashEffect.transform.position = transform.position;
-            //splashEffect.Play();
-            //Debug.Log(splashEffect.transform.position);
-        }
-    }
+            inWater = true;                                                  
+        }                                                                    
+    }                                                                        
 
 
     private void OnCollisionEnter(Collision collision)

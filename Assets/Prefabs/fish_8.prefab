@@ -393,7 +393,6 @@ GameObject:
   - component: {fileID: 7669176685378643260}
   - component: {fileID: 6207292331765128726}
   - component: {fileID: 2392220883739340982}
-  - component: {fileID: 7782597702800447896}
   - component: {fileID: 2268290600462998962}
   m_Layer: 0
   m_Name: fish_8
@@ -411,8 +410,8 @@ Transform:
   m_GameObject: {fileID: 7000198160484401030}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -3.22, y: 26.16, z: 0}
-  m_LocalScale: {x: 2, y: 1.5, z: 1.2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1647955574053696930}
@@ -458,29 +457,8 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 120
   m_CollisionDetection: 0
---- !u!135 &7782597702800447896
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7000198160484401030}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &2268290600462998962
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -500,10 +478,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.46218204
-  m_Height: 1.8319921
+  m_Radius: 0.2154448
+  m_Height: 2.0467663
   m_Direction: 2
-  m_Center: {x: -8.2041705e-17, y: 0.04538119, z: 0.056726813}
+  m_Center: {x: -0.0020873398, y: 0.04538123, z: -0.05066017}
 --- !u!1 &8447864645246638733
 GameObject:
   m_ObjectHideFlags: 0
