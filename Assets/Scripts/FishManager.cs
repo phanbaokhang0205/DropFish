@@ -20,11 +20,6 @@ public class FishManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
-    {
-
-        
-    }
 
     private void Update()
     {
@@ -36,6 +31,7 @@ public class FishManager : MonoBehaviour
 
     public void CreateFish(Vector3 spawnPosition)
     {
+
         chosenFish = FishPooler.Instance.GetFish(spawnPosition, null);
         fishScript = chosenFish.GetComponent<Fish>();
         fishScript.prepareToDrop();
@@ -64,7 +60,6 @@ public class FishManager : MonoBehaviour
         {
             int level = GetFishLevel(collision1.tag) - 1;
             GameObject evolutionFish = collision1;
-            Debug.Log("level của 2 con vừa rồi: " + (level+1));
 
 
             if (collision1.transform.position.y > collision2.transform.position.y)
@@ -73,9 +68,11 @@ public class FishManager : MonoBehaviour
                 collision2.GetComponent<Fish>().prepareToDrop();
                 FishPooler.Instance.ReturnFish(collision1, level);
                 FishPooler.Instance.ReturnFish(collision2, level);
-                
 
+                
                 FishPooler.Instance.GetFish(evolutionFish.transform.position, level+1);
+                GameManager.Instance.updateScore(level+1);
+                AudioManager.Instance.PlayMergeAudio();
             }
         }
     }
@@ -83,8 +80,8 @@ public class FishManager : MonoBehaviour
     private int GetFishLevel(string tag)
     {
         string[] parts = tag.Split('_');
-        Debug.Log("Tag: " + int.Parse(parts[1]));
         return int.Parse(parts[1]);
     }
+
 
 }

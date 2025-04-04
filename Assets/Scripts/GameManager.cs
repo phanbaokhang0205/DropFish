@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
     public enum GameState { Playing, Pause, Win, Lose };
     public GameState CurrentState;
+    public int score;
+
     private void Awake()
     {
         Instance = this;
@@ -18,6 +20,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         CurrentState = GameState.Playing;
+        score = 0;
         Debug.Log("Keep going !");
     }
 
@@ -42,8 +45,19 @@ public class GameManager : MonoBehaviour
         Debug.Log("Wait a minute!");
     }
 
+    public void onResume()
+    {
+        CurrentState = GameState.Playing;
+        PauseCanvas.SetActive(false);
+    }
+
     public void restartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void updateScore(int level)
+    {
+        score += (level * 2 + 2);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Jobs;
 using UnityEngine;
 
 public class FishPooler : MonoBehaviour
@@ -6,17 +7,17 @@ public class FishPooler : MonoBehaviour
     public static FishPooler Instance;
 
     public GameObject[] fishPrefabs;
-    private Dictionary<int, Queue<GameObject>> fishPool = new Dictionary<int, Queue<GameObject>>();
-    private int poolSize = 5; // Số lượng cá mỗi level ban đầu trong pool
+    public Dictionary<int, Queue<GameObject>> fishPool = new Dictionary<int, Queue<GameObject>>();
+    public int rs;
+
+    public int poolSize = 5;
+    public GameObject nextFish;
 
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Start()
-    {
         InitializePool();
+        rs = Random.Range(0, 4);
     }
 
     private void InitializePool()
@@ -37,24 +38,38 @@ public class FishPooler : MonoBehaviour
     public GameObject GetFish(Vector3 spawnPosition, int? level = null)
     {
 
-        int fishLevel = level ?? Random.Range(0, 4);
-
+        int fishLevel = level ?? rs;
         if (fishPool.ContainsKey(fishLevel) && fishPool[fishLevel].Count > 0)
         {
             GameObject fish = fishPool[fishLevel].Dequeue();
-            //Debug.Log($"Số lượng cá level {fishLevel} sau khi lấy: {fishPool[fishLevel].Count}");
             fish.transform.position = spawnPosition;
             fish.SetActive(true);
+            randomFish(level);
             return fish;
         }
         else
         {
-            // Nếu không có cá trong pool, tạo mới
-            Debug.Log("Next level: " + fishLevel);
             GameObject newFish = Instantiate(fishPrefabs[fishLevel], spawnPosition, Quaternion.Euler(0, 90, 0));
             newFish.SetActive(true);
+            randomFish(level);
             return newFish;
         }
+    }
+
+
+    public void randomFish(int? level)
+    {
+        if (level != null) return;
+
+        //if (nextFish) { nextFish.SetActive(false); }
+
+        rs = Random.Range(0, 4);
+        //nextFish = fishPool[rs].Dequeue();
+
+        //nextFish.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(100, 600, 10));
+        //nextFish.SetActive(true);
+        
+        Debug.Log("Next fish: " + rs);
     }
 
     public void ReturnFish(GameObject fish, int level)

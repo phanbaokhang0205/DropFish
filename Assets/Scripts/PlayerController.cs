@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
 
     private GameManager gameManager;
     private FishManager fishManager;
+    private FishPooler fishPooler;
+
     private Vector3 touchPosition;
     private Touch touch;
 
@@ -45,8 +47,6 @@ public class PlayerController : MonoBehaviour
         waterSize = water.GetComponent<Renderer>();
         leftSide = Camera.main.WorldToScreenPoint(new Vector3(waterSize.bounds.min.x, 0, 0)).x;
         rightSide = Camera.main.WorldToScreenPoint(new Vector3(waterSize.bounds.max.x, 0, 0)).x;
-        Debug.Log("min" + waterSize.bounds.min.x);
-        Debug.Log("max" + waterSize.bounds.max.x);
 
         /// init position
         touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(waterWidth, waterHeight, 10));
@@ -82,7 +82,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (fishManager.fishScript.isDropped) return;
 
-                Debug.Log(fishManager.chosenFish.transform.position.x);
                 fishManager.MoveFish(touchPosition);
                 checkPosition();
                 setLinePosition();
@@ -111,7 +110,7 @@ public class PlayerController : MonoBehaviour
         // GameState
         if (fishManager.chosenFish.transform.position.y < -5)
         {
-            gameManager.onLose();
+            //gameManager.onLose();
         }
     }
 
@@ -149,6 +148,8 @@ public class PlayerController : MonoBehaviour
     {
         splashEffect.transform.position = fishManager.chosenFish.transform.position;
         splashEffect.Play();
+        AudioManager.Instance.PlayWaterDrop();
+
     }
 
     IEnumerator DelayCreateFish(Vector3 touchPosition)

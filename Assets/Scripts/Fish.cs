@@ -52,6 +52,7 @@ public class Fish : MonoBehaviour
         fishRb.constraints =  RigidbodyConstraints.FreezePositionZ |
                               RigidbodyConstraints.FreezeRotationZ |
                               RigidbodyConstraints.FreezeRotationY;
+
     }
 
 
@@ -72,6 +73,7 @@ public class Fish : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         fishManager.MergeFish(gameObject, collision.gameObject);
+
     }
 
 
