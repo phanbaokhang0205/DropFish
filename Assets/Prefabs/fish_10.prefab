@@ -177,6 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inWater: 0
   isDropped: 0
+  splashEffect: {fileID: 0}
 --- !u!54 &7919985193165820830
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -223,10 +224,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.33643913
-  m_Height: 2.0101151
+  m_Radius: 0.28252283
+  m_Height: 1.4998823
   m_Direction: 2
-  m_Center: {x: 0.07, y: -0.01654776, z: -0.05124682}
+  m_Center: {x: 0.06999999, y: 0.0005476475, z: 0.0066140657}
 --- !u!1 &4017915171231319857
 GameObject:
   m_ObjectHideFlags: 0

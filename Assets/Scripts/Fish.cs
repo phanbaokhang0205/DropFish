@@ -1,4 +1,5 @@
-﻿using Unity.VisualScripting;
+﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Fish : MonoBehaviour
@@ -9,6 +10,7 @@ public class Fish : MonoBehaviour
 
     public bool inWater;
     public bool isDropped;
+    public ParticleSystem splashEffect;
 
     void Start()
     {
@@ -16,14 +18,24 @@ public class Fish : MonoBehaviour
 
         fishRb = gameObject.GetComponent<Rigidbody>();
 
+        splashEffect = GameObject.FindGameObjectWithTag("splash").GetComponent<ParticleSystem>();
+
         prepareToDrop();
     }
 
     void Update()
     {
-        if (inWater)
+        if (!inWater) return;
+
+
+        if (transform.position.y < -5)
         {
-            dropped();
+            GameManager.Instance.onLose();
+        }
+
+        if (gameObject.tag == "fish_11")
+        {
+            GameManager.Instance.onWin();
         }
     }
 
@@ -34,14 +46,14 @@ public class Fish : MonoBehaviour
         isDropped = false;
         fishRb.useGravity = false;
         transform.rotation = Quaternion.Euler(0, 90, 0);
-        fishRb.constraints = 
+        fishRb.constraints =
             RigidbodyConstraints.FreezePositionX |
             RigidbodyConstraints.FreezePositionY |
             RigidbodyConstraints.FreezePositionZ |
-            RigidbodyConstraints.FreezeRotationX | 
-            RigidbodyConstraints.FreezeRotationY | 
+            RigidbodyConstraints.FreezeRotationX |
+            RigidbodyConstraints.FreezeRotationY |
             RigidbodyConstraints.FreezeRotationZ;
-        
+
 
     }
 
@@ -49,7 +61,7 @@ public class Fish : MonoBehaviour
     {
         isDropped = true;
         fishRb.useGravity = true;
-        fishRb.constraints =  RigidbodyConstraints.FreezePositionZ |
+        fishRb.constraints = RigidbodyConstraints.FreezePositionZ |
                               RigidbodyConstraints.FreezeRotationZ |
                               RigidbodyConstraints.FreezeRotationY;
 
@@ -60,10 +72,28 @@ public class Fish : MonoBehaviour
     {
         if (other.gameObject.tag == "water")
         {
-            inWater = true;                                                  
-        }                                                                    
-    }                                                                        
+            inWater = true;
+            dropped();
+            setsplashEffect();
+        }
 
+        if (other.gameObject.tag == "test_1")
+        {
+            Material myMaterial = other.gameObject.GetComponent<Renderer>().material;
+            myMaterial.SetFloat("_position_X", transform.position.x);
+            myMaterial.SetFloat("_startTime", Time.time);
+            Debug.Log(Time.time);
+
+        }
+
+    }
+
+    //private IEnumerator ResetMaterial(Material myMaterial)
+    //{
+    //    yield return new WaitForSeconds(2f);
+    //    myMaterial.SetFloat("_Strength", 0.1f);
+    //    //myMaterial.SetFloat("_Speed", 0.5f);
+    //}
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -73,9 +103,13 @@ public class Fish : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         fishManager.MergeFish(gameObject, collision.gameObject);
-
     }
 
-
+    void setsplashEffect()
+    {
+        splashEffect.transform.position = transform.position;
+        splashEffect.Play();
+        AudioManager.Instance.PlayWaterDrop();
+    }
 
 }

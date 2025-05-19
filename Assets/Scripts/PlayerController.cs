@@ -3,40 +3,28 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
-/**
- * 1. Tại sao phải gán giá trị trong start mà không gán trực tiếp ngoài ?
- * 2. Tại sao Init Fish không dùng touchPosition mà phải tạo 1 Vector3 mới là spamwnPosition ?
- * 3. Tại sao điền tham số trong vector3 là 0 rồi mà vẫn gán lại cho spawnPosition.z = 0
- */
+using static GameManager;
 public class PlayerController : MonoBehaviour
 {
     public GameObject line;
-    public ParticleSystem splashEffect;
     public GameObject water;
 
-    private GameManager gameManager;
     private FishManager fishManager;
-    private FishPooler fishPooler;
-
+    
     private Vector3 touchPosition;
     private Touch touch;
 
-    private int heightDrop;
     private Renderer rendLine;
     private Vector3 targetCenter;
 
-    private Coroutine createFishCoroutine;
 
     //fishTank
     private Renderer waterSize;
     private float waterHeight;
     private float waterWidth;
-    private float leftSide;
-    private float rightSide;
 
     private void Start()
     {
-        gameManager = GameManager.Instance;
         fishManager = FishManager.Instance;
 
         /// fish tank props
@@ -45,8 +33,6 @@ public class PlayerController : MonoBehaviour
         waterWidth = waterScreenPos.x;
 
         waterSize = water.GetComponent<Renderer>();
-        leftSide = Camera.main.WorldToScreenPoint(new Vector3(waterSize.bounds.min.x, 0, 0)).x;
-        rightSide = Camera.main.WorldToScreenPoint(new Vector3(waterSize.bounds.max.x, 0, 0)).x;
 
         /// init position
         touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(waterWidth, waterHeight, 10));
@@ -65,7 +51,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && GameManager.Instance.CurrentState == GameManager.GameState.Playing)
         {
             touch = Input.GetTouch(0);
             touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, waterHeight, 10));
@@ -98,20 +84,9 @@ public class PlayerController : MonoBehaviour
         {
             touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, waterHeight, 10));
             fishManager.CreateFish(touchPosition);
-            //createFishCoroutine = StartCoroutine(DelayCreateFish(touchPosition));
             setLinePosition();
         }
 
-        if (fishManager.fishScript.inWater)
-        {
-            setsplashEffect();
-        }
-
-        // GameState
-        if (fishManager.chosenFish.transform.position.y < -5)
-        {
-            //gameManager.onLose();
-        }
     }
 
     void checkPosition()
@@ -144,17 +119,4 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void setsplashEffect()
-    {
-        splashEffect.transform.position = fishManager.chosenFish.transform.position;
-        splashEffect.Play();
-        AudioManager.Instance.PlayWaterDrop();
-
-    }
-
-    IEnumerator DelayCreateFish(Vector3 touchPosition)
-    {
-        yield return new WaitForSeconds(1f);
-        fishManager.CreateFish(touchPosition);
-    }
 }

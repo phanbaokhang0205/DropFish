@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 6539097477171719797}
   - component: {fileID: 8940566042574981361}
   - component: {fileID: -211098479059581538}
+  - component: {fileID: -3791240830386549257}
   m_Layer: 0
   m_Name: fish_2
   m_TagString: fish_2
@@ -242,6 +243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inWater: 0
   isDropped: 0
+  splashEffect: {fileID: 0}
 --- !u!54 &8940566042574981361
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -288,10 +290,32 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.31468454
-  m_Height: 1.3187293
+  m_Radius: 0.263772
+  m_Height: 1.0580575
   m_Direction: 2
-  m_Center: {x: -0.01768601, y: 0.009166956, z: 0.018629313}
+  m_Center: {x: -0.017686024, y: -0.005088647, z: 0.12860039}
+--- !u!95 &-3791240830386549257
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6004537163691821144}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e0897bf94c83edf4dbc10d6959cfdbfa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7614179323370696767
 GameObject:
   m_ObjectHideFlags: 0

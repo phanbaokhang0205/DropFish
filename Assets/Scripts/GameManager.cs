@@ -42,7 +42,6 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = GameState.Pause;
         PauseCanvas.SetActive(true);
-        Debug.Log("Wait a minute!");
     }
 
     public void onResume()

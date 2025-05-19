@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
-/**
-    * Bug:
-    * 1. Khi merge nhiều cá liên tục thì lỗi cá bị mất (done)
- */
 
 
 public class FishManager : MonoBehaviour
@@ -31,7 +27,6 @@ public class FishManager : MonoBehaviour
 
     public void CreateFish(Vector3 spawnPosition)
     {
-
         chosenFish = FishPooler.Instance.GetFish(spawnPosition, null);
         fishScript = chosenFish.GetComponent<Fish>();
         fishScript.prepareToDrop();
@@ -40,7 +35,6 @@ public class FishManager : MonoBehaviour
     public void PrepareFish(Vector3 touchPosition)
     {
         chosenFish.transform.position = touchPosition;
-
     }
 
     public void DropFish()
@@ -69,9 +63,9 @@ public class FishManager : MonoBehaviour
                 FishPooler.Instance.ReturnFish(collision1, level);
                 FishPooler.Instance.ReturnFish(collision2, level);
 
-                
-                FishPooler.Instance.GetFish(evolutionFish.transform.position, level+1);
-                GameManager.Instance.updateScore(level+1);
+
+                FishPooler.Instance.GetFish(evolutionFish.transform.position, level + 1);
+                GameManager.Instance.updateScore(level + 1);
                 AudioManager.Instance.PlayMergeAudio();
             }
         }
