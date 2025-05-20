@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public GameObject LoseCanvas;
     public GameObject PauseCanvas;
 
-    public enum GameState { Playing, Pause, Win, Lose };
+    public enum GameState { Playing, Pause, Win, Lose, onChosen };
     public GameState CurrentState;
     public int score;
 
@@ -21,21 +21,21 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = GameState.Playing;
         score = 0;
-        Debug.Log("Keep going !");
+        //Debug.Log("Keep going !");
     }
 
     public void onWin()
     {
         CurrentState = GameState.Win;
         WinCanvas.SetActive(true);
-        Debug.Log("You Win");
+        //Debug.Log("You Win");
     }
 
     public void onLose()
     {
         CurrentState = GameState.Lose;
         LoseCanvas.SetActive(true);
-        Debug.Log("You lose");
+        //Debug.Log("You lose");
     }
 
     public void onPause()
@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 
     public void updateScore(int level)
     {

@@ -22,6 +22,9 @@ TagManager:
   - line
   - splash
   - test_1
+  - hammer
+  - shake
+  - bomb
   layers:
   - Default
   - TransparentFX

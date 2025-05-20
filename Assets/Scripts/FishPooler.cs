@@ -17,19 +17,22 @@ public class FishPooler : MonoBehaviour
     public int rs;
 
     public int poolSize = 5;
+    public GameObject nextFishImage;
+
     private GameObject nextFish;
+    
     
     private void Awake()
     {
         Instance = this;
         InitializePool();
         rs = Random.Range(0, 4);
-        //Debug.Log("rs in  awake" + rs);
+        Debug.Log(nextFishImage.transform.position);
     }
 
     private void InitializePool()
     {
-        // Khởi tạo fishPool
+        // Khởi tạo cá trong pool
         for (int i = 0; i < 6; i++)
         {
             fishPool[i] = new Queue<GameObject>();
@@ -42,36 +45,16 @@ public class FishPooler : MonoBehaviour
             }
         }
 
-        // Khởi tạo initialFishesPool
+        // Khởi tạo 4 cá đầu tiên, dùng để hiển thị cá tiếp theo
         for (int i = 0; i < 4; i++)
         {
             initalFishes[i] = new Queue<GameObject>();
             GameObject fish = Instantiate(fishPrefabs[i]);
-            //Debug.Log("\n tag: " + fish.tag);
             fish.SetActive(false);
             initalFishes[i].Enqueue(fish);
         }
 
     }
-
-    //public void GetInitialFish()
-    //{
-    //    // lấy rs -> active true fish(rs) -> active false fish(prev_rs)
-    //    int prev = rs;
-    //    if (initalFishes.ContainsKey(prev) && initalFishes[prev].Count > 0)
-    //    {
-    //        GameObject fish = initalFishes[prev].Dequeue();
-    //        Debug.Log("Previous fish: " + fish.tag);
-    //    }
-
-    //    rs = Random.Range(0, 4);
-    //    int curr = rs;
-    //    if (initalFishes.ContainsKey(curr) && initalFishes[curr].Count > 0)
-    //    {
-    //        GameObject fish = initalFishes[curr].Dequeue();
-    //        Debug.Log("Current fish: " + fish.tag);
-    //    }    
-    //}
 
     public GameObject GetFish(Vector3 spawnPosition, int? level = null)
     {
@@ -85,7 +68,6 @@ public class FishPooler : MonoBehaviour
             fish.transform.position = spawnPosition;
             fish.SetActive(true);
             randomFish(level);
-
             return fish;
         }
         else
@@ -95,33 +77,29 @@ public class FishPooler : MonoBehaviour
             randomFish(level);
             return newFish;
         }
-
-        
-
-
     }
 
 
     public void randomFish(int? level)
     {
+        
         if (level != null) return;
 
-        rs = Random.Range(0, 4);
-        //Debug.Log("rs in random: " + rs);
-        //Hiển thị nextFish
+        //cất cá trước đó đi để lấy ra cá tiếp theo
         if (nextFish)
         {
             nextFish.SetActive(false);
-            Debug.Log("rs in false: " + rs);
             initalFishes[rs].Enqueue(nextFish);
         }
 
-        // Dù có `nextFish` hay không, đoạn sau vẫn giống nhau
-        nextFish = initalFishes[rs].Dequeue();
-        nextFish.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(100, 100, 10));
-        nextFish.SetActive(true);
-        //Debug.Log("rs in true: " + rs);
+        //random cá tiếp theo và hiển thị
+        rs = Random.Range(0, 4);
 
+        nextFish = initalFishes[rs].Dequeue();
+        Vector3 imagePos = nextFishImage.transform.position;
+        nextFish.transform.position = new Vector3(imagePos.x, imagePos.y, 0);
+
+        nextFish.SetActive(true);
     }
 
     public void ReturnFish(GameObject fish, int level)
@@ -134,9 +112,11 @@ public class FishPooler : MonoBehaviour
         fishPool[level].Enqueue(fish);
     }
 
+
+
     public void checkTheFinalFish(int fishLevel)
     {
-        if (fishLevel == 10)
+        if (fishLevel == 8)
         {
             GameManager.Instance.onWin();
         }

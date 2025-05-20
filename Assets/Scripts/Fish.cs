@@ -82,18 +82,10 @@ public class Fish : MonoBehaviour
             Material myMaterial = other.gameObject.GetComponent<Renderer>().material;
             myMaterial.SetFloat("_position_X", transform.position.x);
             myMaterial.SetFloat("_startTime", Time.time);
-            Debug.Log(Time.time);
 
         }
 
     }
-
-    //private IEnumerator ResetMaterial(Material myMaterial)
-    //{
-    //    yield return new WaitForSeconds(2f);
-    //    myMaterial.SetFloat("_Strength", 0.1f);
-    //    //myMaterial.SetFloat("_Speed", 0.5f);
-    //}
 
     private void OnCollisionEnter(Collision collision)
     {

@@ -291,9 +291,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.263772
-  m_Height: 1.0580575
+  m_Height: 1.2902193
   m_Direction: 2
-  m_Center: {x: -0.017686024, y: -0.005088647, z: 0.12860039}
+  m_Center: {x: -0.017686022, y: -0.005088647, z: 0.061395608}
 --- !u!95 &-3791240830386549257
 Animator:
   serializedVersion: 7
@@ -467,6 +467,7 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 7331528834946717642, guid: 9b65d616fb2005549be4b3913c0723bb, type: 3}
+  - {fileID: 2100000, guid: ad5221e119352df4fbb8aca3c650f277, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -50,12 +50,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
-        if (Input.touchCount > 0 && GameManager.Instance.CurrentState == GameManager.GameState.Playing)
+        if (GameManager.Instance.CurrentState == GameManager.GameState.Playing && Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
             touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, waterHeight, 10));
-
+            
             if (touch.phase == TouchPhase.Began)
             {
                 if (fishManager.fishScript.isDropped) return;
@@ -116,7 +115,6 @@ public class PlayerController : MonoBehaviour
         newLinePosition.x = fishManager.chosenFish.transform.position.x;
         line.transform.position = newLinePosition;
         line.SetActive(true);
-
     }
 
 }
