@@ -52,22 +52,20 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
         BombGrid.transform.position = initBombGridPosition;
         GameManager.Instance.CurrentState = GameManager.GameState.Playing;
 
-        Debug.Log(fishList.Count);
+        foreach (GameObject fish in fishList)
+        {
+            fish.SetActive(false);
+        }
 
     }
-    // trigger cho icon bomb nhma z không trùng với z của cá nên kh trigger được
-    // khả năng là gán script cho bombgrid
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        // Thêm vào list
-        Debug.Log(other.tag);
         fishList.Add(other.gameObject);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // xóa khỏi list
-
+        fishList.Remove(other.gameObject);
     }
 
 }

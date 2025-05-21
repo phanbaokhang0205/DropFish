@@ -31,11 +31,12 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
     public void OnDrag(PointerEventData eventData)
     {
         touch = Input.GetTouch(0);
-        touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+        touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 1));
         transform.position = touchPosition;
     }
     private void OnTriggerEnter(Collider other)
     {
+        // Tạo hiệu ứng nhấp nháy cho cá - chưa được
         Debug.Log(other.tag);
         target = other.gameObject;
         targetSkinned = target.GetComponentInChildren<SkinnedMeshRenderer>();
@@ -45,6 +46,7 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
 
     private void OnTriggerExit(Collider other)
     {
+        // tắt hiệu ứng nhấp nháy - chưa được
         targetMaterial.SetFloat("_trigger", 0f);
     }
     public void OnEndDrag(PointerEventData eventData)
@@ -52,10 +54,11 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
         Debug.Log(transform.position);
         transform.position = initPosition;
         GameManager.Instance.CurrentState = GameManager.GameState.Playing;
-        Debug.Log("Với: " + target.tag);
-        target.SetActive(false);
+        if (target)
+        {
+            target.SetActive(false);
+        }
     }
-
 
 
 }
