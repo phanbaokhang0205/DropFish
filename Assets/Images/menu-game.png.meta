@@ -108,12 +108,34 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: menu-game_0
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 836
+        width: 355
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 12, y: 5, z: 3, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 911493f243f9ab740b80afb529001529
+      internalID: 2014460347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 78b2421e4c49c2b4db167a9f0865d107
     internalID: 0
     vertices: []
     indices: 
@@ -122,7 +144,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      menu-game_0: 2014460347
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

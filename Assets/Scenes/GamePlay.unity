@@ -984,8 +984,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fishTank: {fileID: 1437551557}
-  frequency: 0
-  amplitude: 0.2
+  speedRotate: 40
+  speedPos: 10
 --- !u!114 &389569150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4173,7 +4173,7 @@ Transform:
   m_GameObject: {fileID: 1437551557}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.7990624, y: 0, z: 0}
+  m_LocalPosition: {x: 2, y: 0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

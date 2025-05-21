@@ -21,37 +21,37 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = GameState.Playing;
         score = 0;
-        //Debug.Log("Keep going !");
     }
 
     public void onWin()
     {
         CurrentState = GameState.Win;
         WinCanvas.SetActive(true);
-        //Debug.Log("You Win");
     }
 
     public void onLose()
     {
         CurrentState = GameState.Lose;
         LoseCanvas.SetActive(true);
-        //Debug.Log("You lose");
     }
 
     public void onPause()
     {
+        Time.timeScale = 0f;
         CurrentState = GameState.Pause;
         PauseCanvas.SetActive(true);
     }
 
     public void onResume()
     {
+        Time.timeScale = 1f;
         CurrentState = GameState.Playing;
         PauseCanvas.SetActive(false);
     }
 
     public void restartGame()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
