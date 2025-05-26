@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.Jobs;
 using UnityEngine;
-/**
- * Tạo mảng chứa 4 fish đầu tiên
- * Get fish dựa trên rs (chỉ hiển thị - setActive = true)
- * Nếu đã tồn tại fish thì setActive = false fish cũ và get (true) fish mới
- */
+
 public class FishPooler : MonoBehaviour
 {
     public static FishPooler Instance;

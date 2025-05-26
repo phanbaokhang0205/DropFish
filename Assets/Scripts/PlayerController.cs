@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
-using static GameManager;
 public class PlayerController : MonoBehaviour
 {
     public GameObject line;
@@ -16,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private Renderer rendLine;
     private Vector3 targetCenter;
-
+    private bool isDrop;
 
     //fishTank
     private Renderer waterSize;
@@ -42,7 +41,7 @@ public class PlayerController : MonoBehaviour
         rendLine = line.GetComponent<Renderer>();
         targetCenter = fishManager.chosenFish.GetComponent<Collider>().bounds.center;
 
-
+        isDrop = true;
 
         setLinePosition();
 
@@ -50,9 +49,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.CurrentState == GameManager.GameState.Playing && Input.touchCount > 0)
+        if (GameManager.Instance.CurrentState == GameManager.GameState.Playing && Input.touchCount > 0 )
         {
             touch = Input.GetTouch(0);
+            
             touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, waterHeight, 10));
             
             if (touch.phase == TouchPhase.Began)
@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
                 fishManager.PrepareFish(touchPosition);
                 checkPosition();
                 setLinePosition();
+
             }
             else if (touch.phase == TouchPhase.Moved)
             {
@@ -72,10 +73,12 @@ public class PlayerController : MonoBehaviour
                 setLinePosition();
 
             }
-            else if (touch.phase == TouchPhase.Ended)
+            else if (touch.phase == TouchPhase.Ended && isDrop)
             {
                 fishManager.DropFish();
                 line.SetActive(false);
+                isDrop = false;
+                Invoke("delayDrop", 1f);
             }
         }
 
@@ -86,6 +89,12 @@ public class PlayerController : MonoBehaviour
             setLinePosition();
         }
 
+    }
+
+    void delayDrop()
+    {
+        fishManager.chosenFish = null;
+        isDrop = true;
     }
 
     void checkPosition()

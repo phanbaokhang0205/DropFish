@@ -6,5 +6,7 @@ public class CloseBtn : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         GameManager.Instance.onResume();
+        GameManager.Instance.delayState();
+
     }
 }

@@ -184,6 +184,7 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: -2260628645532441752, guid: d4cb7553da6da2143ad42dcfc104bb8e, type: 3}
+  - {fileID: 2100000, guid: f324993e167d64a4c81a9984b87abd0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -431,9 +432,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 223feb9878b6d6440a6ce18c1b573dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashAlpha: 130
+  flashInterval: 0.2
   inWater: 0
   isDropped: 0
   splashEffect: {fileID: 0}
+  isFlashing: 0
 --- !u!54 &4905774609696016307
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -481,9 +485,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.38436332
-  m_Height: 1.8918228
+  m_Height: 2.0211155
   m_Direction: 2
-  m_Center: {x: -4.6953154e-16, y: 0.006789893, z: 0.045720883}
+  m_Center: {x: 1.8870242e-16, y: 0.006789883, z: -0.018925268}
 --- !u!95 &6552431294242332227
 Animator:
   serializedVersion: 7

@@ -60,4 +60,14 @@ public class GameManager : MonoBehaviour
     {
         score += (level * 2 + 2);
     }
+
+    public void delayState()
+    {
+        CurrentState = GameState.onChosen;
+        Invoke("deplayStateInvoke", 0.1f);
+    }
+    private void deplayStateInvoke()
+    {
+        CurrentState = GameState.Playing;
+    }
 }

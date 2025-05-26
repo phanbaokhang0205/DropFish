@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.GraphicsBuffer;
 
 public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -8,9 +9,9 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
     private Touch touch;
     private Vector3 initPosition;
     private Vector3 initBombGridPosition;
+    private Fish fishScript;
 
-    [SerializeField]    
-    private GameObject BombGrid;
+    [SerializeField] private GameObject BombGrid;
 
     private List<GameObject> fishList = new List<GameObject>();
 
@@ -56,15 +57,37 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
         {
             fish.SetActive(false);
         }
+        fishList.Clear();
 
+        GameManager.Instance.delayState();
     }
     private void OnTriggerEnter(Collider other)
     {
-        fishList.Add(other.gameObject);
+        if (other.tag.StartsWith("fish"))
+        {
+            fishList.Add(other.gameObject);
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        foreach (GameObject fish in fishList)
+        {
+            fishScript = fish.GetComponent<Fish>();
+            if (fish.activeInHierarchy)
+            {
+                fishScript.StartFlash();
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        foreach (GameObject fish in fishList)
+        {
+            fishScript = fish.GetComponent<Fish>();
+            fishScript.StopFlash();
+        }
         fishList.Remove(other.gameObject);
     }
 

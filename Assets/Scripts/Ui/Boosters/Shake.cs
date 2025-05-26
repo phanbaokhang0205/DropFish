@@ -9,9 +9,10 @@ public class Shake : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private GameObject fishTank;
     private Vector3 initFishTankPosition;
+    private Rigidbody rb;
 
-    public float speedRotate = 40f;
-    public float speedPos = 10f;
+    public float speedRotate = 180f;
+    public float speedPos = 40f;
     private List<Quaternion> targetList = new List<Quaternion>();
     private List<Vector3> positionList = new List<Vector3>();
 
@@ -24,8 +25,11 @@ public class Shake : MonoBehaviour, IPointerClickHandler
     private Vector3 pos1;
     private Vector3 pos2;
     private Vector3 pos3;
+
+    private bool isShaking;
     void Start()
     {
+        rb = fishTank.GetComponent<Rigidbody>();
         initFishTankPosition = fishTank.transform.position;
         target1 = Quaternion.Euler(0, 0, -15f);
         target2 = Quaternion.Euler(0, 0, 15f);
@@ -48,12 +52,17 @@ public class Shake : MonoBehaviour, IPointerClickHandler
 
     void Update()
     {
-        //x = initFishTankPosition.x + Mathf.Sin(Time.time * frequency) * amplitude;
-        //fishTank.transform.position = new Vector3(x, initFishTankPosition.y, initFishTankPosition.z);
+
     }
+
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        StartCoroutine(ShakeSequence());
+        if (!isShaking)
+        {
+            StartCoroutine(ShakeSequence());
+            Debug.Log("From shake: " + GameManager.Instance.CurrentState);
+        }
     }
 
     IEnumerator ShakeSequence()
@@ -61,8 +70,14 @@ public class Shake : MonoBehaviour, IPointerClickHandler
         Coroutine move = StartCoroutine(MoveTank());
         Coroutine rotate = StartCoroutine(RotateTank());
 
+        GameManager.Instance.delayState();
+
+        isShaking = true;
+
         yield return move;
         yield return rotate;
+
+        isShaking = false;
     }
 
     IEnumerator RotateTank()
@@ -72,11 +87,19 @@ public class Shake : MonoBehaviour, IPointerClickHandler
             targetRotate = item;
             while (Quaternion.Angle(fishTank.transform.rotation, targetRotate) > 0.1f)
             {
-                fishTank.transform.rotation = Quaternion.RotateTowards(
+                //fishTank.transform.rotation = Quaternion.RotateTowards(
+                //    fishTank.transform.rotation,
+                //    targetRotate,
+                //    speedRotate * Time.deltaTime
+                //);
+
+                rb.MoveRotation(Quaternion.RotateTowards(
                     fishTank.transform.rotation,
                     targetRotate,
                     speedRotate * Time.deltaTime
-                );
+                ));
+
+
 
                 yield return null;
             }
@@ -90,11 +113,17 @@ public class Shake : MonoBehaviour, IPointerClickHandler
             targetPos = item;
             while (Vector3.Distance(fishTank.transform.position, targetPos) > 0.01f)
             {
-                fishTank.transform.position = Vector3.Lerp(
+                //fishTank.transform.position = Vector3.Lerp(
+                //    fishTank.transform.position,
+                //    targetPos,
+                //    Time.deltaTime * speedPos
+                //);
+
+                rb.MovePosition(Vector3.Lerp(
                     fishTank.transform.position,
                     targetPos,
                     Time.deltaTime * speedPos
-                );
+                ));
 
                 yield return null;
             }

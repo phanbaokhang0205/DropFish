@@ -1,16 +1,25 @@
 ﻿using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Fish : MonoBehaviour
 {
 
     private FishManager fishManager;
     private Rigidbody fishRb;
+    private SkinnedMeshRenderer smr;
+    private Material[] mats;
+    private Coroutine flashCoroutine;
+
+    [SerializeField] private float flashAlpha = 130f;
+    [SerializeField] private float flashInterval = 0.2f;
 
     public bool inWater;
     public bool isDropped;
     public ParticleSystem splashEffect;
+    public bool isFlashing;
+
 
     void Start()
     {
@@ -19,6 +28,10 @@ public class Fish : MonoBehaviour
         fishRb = gameObject.GetComponent<Rigidbody>();
 
         splashEffect = GameObject.FindGameObjectWithTag("splash").GetComponent<ParticleSystem>();
+        
+        smr = GetComponentInChildren<SkinnedMeshRenderer>();
+        mats = smr.materials;
+        isFlashing = false;
 
         prepareToDrop();
     }
@@ -37,6 +50,8 @@ public class Fish : MonoBehaviour
         {
             GameManager.Instance.onWin();
         }
+
+        
     }
 
     public void prepareToDrop()
@@ -104,4 +119,47 @@ public class Fish : MonoBehaviour
         AudioManager.Instance.PlayWaterDrop();
     }
 
+    public void StartFlash()
+    {
+        if (!isFlashing && mats.Length > 1)
+        {
+            isFlashing = true;
+            flashCoroutine = StartCoroutine(FlashEffect());
+        }
+    }
+
+    public void StopFlash()
+    {
+        if (isFlashing)
+        {
+            isFlashing = false;
+            if (flashCoroutine != null)
+            {
+                StopCoroutine(flashCoroutine);
+            }
+
+            // Reset alpha về giá trị ban đầu
+            Material mat1 = mats[1];
+            Color color = mat1.color;
+            color.a = 0f;
+            mat1.color = color;
+        }
+    }
+
+    IEnumerator FlashEffect()
+    {
+        Material mat1 = mats[1];
+        bool toggle = false;
+
+        while (isFlashing)
+        {
+            Color color = mat1.color;
+            color.a = toggle ? flashAlpha : 1f;
+            mat1.color = color;
+
+            toggle = !toggle;
+
+            yield return new WaitForSeconds(flashInterval);
+        }
+    }
 }

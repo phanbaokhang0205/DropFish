@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.GraphicsBuffer;
 
 public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -9,6 +10,7 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
     private GameObject target;
     private SkinnedMeshRenderer targetSkinned;
     private Material targetMaterial;
+    private Fish fishScript;
     void Start()
     {
         initPosition = transform.position;
@@ -34,30 +36,40 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
         touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 1));
         transform.position = touchPosition;
     }
+
     private void OnTriggerEnter(Collider other)
     {
-        // Tạo hiệu ứng nhấp nháy cho cá - chưa được
-        Debug.Log(other.tag);
-        target = other.gameObject;
-        targetSkinned = target.GetComponentInChildren<SkinnedMeshRenderer>();
-        targetMaterial = targetSkinned.material;
-        targetMaterial.SetFloat("_trigger", 10f);
+        if (other.tag.StartsWith("fish"))
+        {
+            target = other.gameObject;
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (target)
+        {
+            fishScript = target.GetComponent<Fish>();
+            fishScript.StartFlash();
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // tắt hiệu ứng nhấp nháy - chưa được
-        targetMaterial.SetFloat("_trigger", 0f);
+        if (fishScript)
+        {
+            fishScript.StopFlash();
+        }
+        target = null;
+
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log(transform.position);
         transform.position = initPosition;
-        GameManager.Instance.CurrentState = GameManager.GameState.Playing;
         if (target)
         {
             target.SetActive(false);
         }
+        GameManager.Instance.delayState();
     }
 
 

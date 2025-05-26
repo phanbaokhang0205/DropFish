@@ -147,7 +147,7 @@ Transform:
   m_GameObject: {fileID: 156674410}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.48, y: -4.23, z: 0.21}
+  m_LocalPosition: {x: -1.48, y: -4.23, z: 0.02}
   m_LocalScale: {x: 6.242691, y: 0.5, z: 0.5490088}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -984,8 +984,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fishTank: {fileID: 1437551557}
-  speedRotate: 40
-  speedPos: 10
+  speedRotate: 180
+  speedPos: 40
 --- !u!114 &389569150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3110,6 +3110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56bc7a440dfd46e4eaff256d530eb672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1142423507
 GameObject:
   m_ObjectHideFlags: 0
@@ -4157,6 +4158,7 @@ GameObject:
   - component: {fileID: 1437551558}
   - component: {fileID: 1437551559}
   - component: {fileID: 1437551560}
+  - component: {fileID: 1437551561}
   m_Layer: 0
   m_Name: FishTank
   m_TagString: Untagged
@@ -4173,7 +4175,7 @@ Transform:
   m_GameObject: {fileID: 1437551557}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 0.55, z: 0}
+  m_LocalPosition: {x: 2.1, y: 0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4223,6 +4225,33 @@ MonoBehaviour:
   rs: 0
   poolSize: 5
   nextFishImage: {fileID: 1385497972}
+--- !u!54 &1437551561
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437551557}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1495658743
 GameObject:
   m_ObjectHideFlags: 0
@@ -5412,8 +5441,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2900b5b0bf37d04a8b96cd4e294f0f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &1993957088
-CapsuleCollider:
+--- !u!65 &1993957088
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5430,11 +5459,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 28.288094
-  m_Height: 56.576187
-  m_Direction: 2
-  m_Center: {x: -22.39096, y: 14.77, z: 733.2}
+  serializedVersion: 3
+  m_Size: {x: 57.361275, y: 99.41775, z: 1}
+  m_Center: {x: -20.69014, y: -0.24647708, z: 733.2}
 --- !u!1 &2010038175
 GameObject:
   m_ObjectHideFlags: 0

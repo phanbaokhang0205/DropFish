@@ -19,10 +19,10 @@ public class FishManager : MonoBehaviour
 
     private void Update()
     {
-        if (fishScript.inWater)
-        {
-            chosenFish = null;
-        }
+        //if (fishScript.inWater)
+        //{
+        //    chosenFish = null;
+        //}
     }
 
     public void CreateFish(Vector3 spawnPosition)
