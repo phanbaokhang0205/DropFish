@@ -208,9 +208,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 223feb9878b6d6440a6ce18c1b573dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashAlpha: 130
+  flashInterval: 0.2
   inWater: 0
   isDropped: 0
-  splashEffect: {fileID: 0}
+  isMerge: 0
 --- !u!54 &3759763262086371309
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -291,9 +291,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 223feb9878b6d6440a6ce18c1b573dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashAlpha: 130
+  flashInterval: 0.2
   inWater: 0
   isDropped: 0
-  splashEffect: {fileID: 0}
+  isMerge: 0
 --- !u!95 &-8590439194877735728
 Animator:
   serializedVersion: 7

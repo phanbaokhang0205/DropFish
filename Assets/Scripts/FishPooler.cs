@@ -64,6 +64,12 @@ public class FishPooler : MonoBehaviour
             fish.transform.position = spawnPosition;
             fish.SetActive(true);
             randomFish(level);
+            //if (level != null)
+            //{
+            //    fish.GetComponent<Fish>().isMerge = true;
+            //    //fish.GetComponent<Fish>().dropped();
+            //    Debug.Log("Fish in pooler: " + fish.tag + fish.GetComponent<Fish>().isMerge);
+            //}
             return fish;
         }
         else
@@ -71,8 +77,16 @@ public class FishPooler : MonoBehaviour
             GameObject newFish = Instantiate(fishPrefabs[fishLevel], spawnPosition, Quaternion.Euler(0, 90, 0));
             newFish.SetActive(true);
             randomFish(level);
+            //if (level != null)
+            //{
+            //    newFish.GetComponent<Fish>().isMerge = true;
+            //    //newFish.GetComponent<Fish>().dropped();
+            //    Debug.Log("Fish in pooler: " + newFish.tag + newFish.GetComponent<Fish>().isMerge);
+            //}
             return newFish;
         }
+
+        
     }
 
 

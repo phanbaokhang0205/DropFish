@@ -1,62 +1,75 @@
 ﻿using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Fish : MonoBehaviour
 {
-
     private FishManager fishManager;
     private Rigidbody fishRb;
     private SkinnedMeshRenderer smr;
     private Material[] mats;
     private Coroutine flashCoroutine;
 
-    [SerializeField] private float flashAlpha = 130f;
-    [SerializeField] private float flashInterval = 0.2f;
+    [SerializeField] float flashAlpha = 130f;
+    [SerializeField] float flashInterval = 0.2f;
 
     public bool inWater;
     public bool isDropped;
-    public ParticleSystem splashEffect;
-    public bool isFlashing;
+    public bool isMerge;
+    ParticleSystem splashEffect;
+    bool isFlashing;
 
 
     void Start()
     {
+        //Debug.Log(gameObject.tag + "isMerge before" + isMerge);
+        //if (!isMerge)
+        //{
+        //    prepareToDrop();
+        //}
+        //else
+        //{
+        //    inWater = true;
+        //    dropped();
+        //    Debug.Log(gameObject.tag + "ismerge true");
+        //}
+        Debug.Log(gameObject.tag + "isMerge after" + isMerge);
+
         fishManager = FishManager.Instance;
 
-        fishRb = gameObject.GetComponent<Rigidbody>();
 
         splashEffect = GameObject.FindGameObjectWithTag("splash").GetComponent<ParticleSystem>();
         
         smr = GetComponentInChildren<SkinnedMeshRenderer>();
         mats = smr.materials;
         isFlashing = false;
-
-        prepareToDrop();
+        
     }
 
     void Update()
     {
-        if (!inWater) return;
-
-
-        if (transform.position.y < -5)
+        if (!inWater)
         {
-            GameManager.Instance.onLose();
-        }
-
-        if (gameObject.tag == "fish_11")
+            if (isMerge)
+            {
+                dropped();
+            }
+        } else
         {
-            GameManager.Instance.onWin();
-        }
+            if (transform.position.y < -5)
+            {
+                GameManager.Instance.onLose();
+            }
 
-        
+            if (gameObject.tag == "fish_11")
+            {
+                GameManager.Instance.onWin();
+            }
+        }
     }
 
     public void prepareToDrop()
     {
-        fishRb = GetComponent<Rigidbody>();
+        fishRb = gameObject.GetComponent<Rigidbody>();
         inWater = false;
         isDropped = false;
         fishRb.useGravity = false;
@@ -74,6 +87,8 @@ public class Fish : MonoBehaviour
 
     public void dropped()
     {
+        fishRb = gameObject.GetComponent<Rigidbody>();
+        inWater = true;
         isDropped = true;
         fishRb.useGravity = true;
         fishRb.constraints = RigidbodyConstraints.FreezePositionZ |
@@ -97,7 +112,6 @@ public class Fish : MonoBehaviour
             Material myMaterial = other.gameObject.GetComponent<Renderer>().material;
             myMaterial.SetFloat("_position_X", transform.position.x);
             myMaterial.SetFloat("_startTime", Time.time);
-
         }
 
     }

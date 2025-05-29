@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+﻿using UnityEngine;
 
 
 public class FishManager : MonoBehaviour
@@ -9,6 +7,8 @@ public class FishManager : MonoBehaviour
 
     public GameObject chosenFish;
     public Fish fishScript;
+    public GameObject mergeFish;
+    public Fish mergeFishScript;
 
 
     private void Awake()
@@ -19,10 +19,7 @@ public class FishManager : MonoBehaviour
 
     private void Update()
     {
-        //if (fishScript.inWater)
-        //{
-        //    chosenFish = null;
-        //}
+
     }
 
     public void CreateFish(Vector3 spawnPosition)
@@ -64,7 +61,9 @@ public class FishManager : MonoBehaviour
                 FishPooler.Instance.ReturnFish(collision2, level);
 
 
-                FishPooler.Instance.GetFish(evolutionFish.transform.position, level + 1);
+                mergeFish = FishPooler.Instance.GetFish(evolutionFish.transform.position, level + 1);
+                mergeFishScript = mergeFish.GetComponent<Fish>();
+                mergeFishScript.isMerge = true;
                 GameManager.Instance.updateScore(level + 1);
                 AudioManager.Instance.PlayMergeAudio();
             }

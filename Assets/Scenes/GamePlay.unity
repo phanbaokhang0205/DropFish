@@ -984,8 +984,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fishTank: {fileID: 1437551557}
-  speedRotate: 180
-  speedPos: 40
+  speedRotate: 110
+  speedPos: 30
 --- !u!114 &389569150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3110,7 +3110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56bc7a440dfd46e4eaff256d530eb672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1142423507
 GameObject:
   m_ObjectHideFlags: 0
@@ -5508,6 +5507,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chosenFish: {fileID: 0}
   fishScript: {fileID: 0}
+  mergeFish: {fileID: 0}
+  mergeFishScript: {fileID: 0}
 --- !u!1 &2062712821
 GameObject:
   m_ObjectHideFlags: 0
