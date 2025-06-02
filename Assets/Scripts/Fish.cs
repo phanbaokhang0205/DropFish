@@ -21,19 +21,8 @@ public class Fish : MonoBehaviour
 
     void Start()
     {
-        //Debug.Log(gameObject.tag + "isMerge before" + isMerge);
-        //if (!isMerge)
-        //{
-        //    prepareToDrop();
-        //}
-        //else
-        //{
-        //    inWater = true;
-        //    dropped();
-        //    Debug.Log(gameObject.tag + "ismerge true");
-        //}
-        Debug.Log(gameObject.tag + "isMerge after" + isMerge);
-
+        fishRb = gameObject.GetComponent<Rigidbody>();
+        fishRb.mass = 0;
         fishManager = FishManager.Instance;
 
 

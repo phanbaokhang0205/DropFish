@@ -5,8 +5,8 @@ using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
-    public GameObject line;
-    public GameObject water;
+    [SerializeField] GameObject line;
+    [SerializeField] GameObject water;
 
     private FishManager fishManager;
     
@@ -44,7 +44,6 @@ public class PlayerController : MonoBehaviour
         isDrop = true;
 
         setLinePosition();
-
     }
 
     void Update()
