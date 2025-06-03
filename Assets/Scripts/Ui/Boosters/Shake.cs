@@ -30,7 +30,8 @@ public class Shake : MonoBehaviour, IPointerClickHandler
             rb.AddForce(Vector3.right * forceAmount, ForceMode.Impulse);
             GameManager.Instance.delayState();
             isShaking = true;
-            Invoke("deplayShake", 1);
+            Invoke("deplayShake", 2);
+
         }
     }
 
@@ -38,19 +39,4 @@ public class Shake : MonoBehaviour, IPointerClickHandler
     {
         isShaking = false;
     }
-
-    //IEnumerator ShakeSequence()
-    //{
-    //    Coroutine move = StartCoroutine(MoveTank());
-    //    Coroutine rotate = StartCoroutine(RotateTank());
-
-    //    GameManager.Instance.delayState();
-
-    //    isShaking = true;
-
-    //    yield return move;
-    //    yield return rotate;
-
-    //    isShaking = false;
-    //}
 }

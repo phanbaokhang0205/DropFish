@@ -16,17 +16,17 @@ public class FishPooler : MonoBehaviour
     public GameObject nextFishImage;
 
     private GameObject nextFish;
-    
-    
+    public Transform FishPool;
+
+
     private void Awake()
     {
         Instance = this;
         InitializePool();
         rs = Random.Range(0, 4);
-        Debug.Log(nextFishImage.transform.position);
     }
 
-    private void InitializePool()
+    public void InitializePool()
     {
         // Khởi tạo cá trong pool
         for (int i = 0; i < 6; i++)
@@ -35,7 +35,7 @@ public class FishPooler : MonoBehaviour
 
             for (int j = 0; j < poolSize; j++)
             {
-                GameObject fish = Instantiate(fishPrefabs[i]);
+                GameObject fish = Instantiate(fishPrefabs[i], FishPool);
                 fish.SetActive(false);
                 fishPool[i].Enqueue(fish);
             }
@@ -45,7 +45,7 @@ public class FishPooler : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             initalFishes[i] = new Queue<GameObject>();
-            GameObject fish = Instantiate(fishPrefabs[i]);
+            GameObject fish = Instantiate(fishPrefabs[i], FishPool);
             fish.SetActive(false);
             initalFishes[i].Enqueue(fish);
         }
@@ -64,12 +64,6 @@ public class FishPooler : MonoBehaviour
             fish.transform.position = spawnPosition;
             fish.SetActive(true);
             randomFish(level);
-            //if (level != null)
-            //{
-            //    fish.GetComponent<Fish>().isMerge = true;
-            //    //fish.GetComponent<Fish>().dropped();
-            //    Debug.Log("Fish in pooler: " + fish.tag + fish.GetComponent<Fish>().isMerge);
-            //}
             return fish;
         }
         else
@@ -77,12 +71,6 @@ public class FishPooler : MonoBehaviour
             GameObject newFish = Instantiate(fishPrefabs[fishLevel], spawnPosition, Quaternion.Euler(0, 90, 0));
             newFish.SetActive(true);
             randomFish(level);
-            //if (level != null)
-            //{
-            //    newFish.GetComponent<Fish>().isMerge = true;
-            //    //newFish.GetComponent<Fish>().dropped();
-            //    Debug.Log("Fish in pooler: " + newFish.tag + newFish.GetComponent<Fish>().isMerge);
-            //}
             return newFish;
         }
 
@@ -131,4 +119,15 @@ public class FishPooler : MonoBehaviour
             GameManager.Instance.onWin();
         }
     }
+    public void ClearPool()
+    {
+        foreach (Transform child in FishPool)
+        {
+            Destroy(child.gameObject);
+        }
+
+        fishPool.Clear();
+        initalFishes.Clear();
+    }
+
 }

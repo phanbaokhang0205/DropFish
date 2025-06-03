@@ -25,6 +25,7 @@ TagManager:
   - hammer
   - shake
   - bomb
+  - stepMove
   layers:
   - Default
   - TransparentFX

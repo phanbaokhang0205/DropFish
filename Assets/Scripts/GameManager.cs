@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+
     public static GameManager Instance;
     public GameObject WinCanvas;
     public GameObject LoseCanvas;
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     public enum GameState { Playing, Pause, Win, Lose, onChosen };
     public GameState CurrentState;
     public int score;
+    public int step;
 
     private void Awake()
     {
@@ -61,6 +63,11 @@ public class GameManager : MonoBehaviour
         score += (level * 2 + 2);
     }
 
+    public void updateStep()
+    {
+        step -= 1;
+    }
+
     public void delayState()
     {
         CurrentState = GameState.onChosen;
@@ -69,5 +76,11 @@ public class GameManager : MonoBehaviour
     private void deplayStateInvoke()
     {
         CurrentState = GameState.Playing;
+    }
+
+    public void goToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MenuGame");
     }
 }
