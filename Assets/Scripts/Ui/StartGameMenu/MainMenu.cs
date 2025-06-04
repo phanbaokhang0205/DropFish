@@ -6,7 +6,6 @@ public class MainMenu : MonoBehaviour
 {
     public static MainMenu Instance;
     public int levelIndex;
-
     [SerializeField] GameObject Home;
     [SerializeField] GameObject Chanllenge;
     [SerializeField] GameObject Shop;
@@ -54,7 +53,6 @@ public class MainMenu : MonoBehaviour
         if (int.TryParse(textValue, out int number))
         {
             levelIndex = number - 1;
-            Debug.Log("Số bạn chọn: " + levelIndex);
             PlayChallenge();
         }
         else

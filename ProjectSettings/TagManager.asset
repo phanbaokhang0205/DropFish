@@ -26,6 +26,9 @@ TagManager:
   - shake
   - bomb
   - stepMove
+  - moveLevel
+  - timer
+  - timerLevel
   layers:
   - Default
   - TransparentFX

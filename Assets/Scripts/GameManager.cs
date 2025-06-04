@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = GameState.Playing;
         score = 0;
+        
     }
 
     public void onWin()
@@ -51,13 +52,23 @@ public class GameManager : MonoBehaviour
         PauseCanvas.SetActive(false);
     }
 
+    public void onNextLevel()
+    {
+        CurrentState = GameState.Playing;
+        WinCanvas.SetActive(false);
+    }
+
     public void restartGame()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-
+    public void restartGameAdvance()
+    {
+        CurrentState = GameState.Playing;
+        LoseCanvas.SetActive(false);
+    }
     public void updateScore(int level)
     {
         score += (level * 2 + 2);

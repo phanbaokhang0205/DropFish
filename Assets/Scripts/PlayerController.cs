@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
                 setLinePosition();
 
             }
-            else if (touch.phase == TouchPhase.Ended && isDrop)
+            else if (touch.phase == TouchPhase.Ended && isDrop && !LevelManager.Instance.isWaiting)
             {
                 fishManager.DropFish();
                 line.SetActive(false);

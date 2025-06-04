@@ -18,7 +18,6 @@ public class FishPooler : MonoBehaviour
     private GameObject nextFish;
     public Transform FishPool;
 
-
     private void Awake()
     {
         Instance = this;
@@ -54,9 +53,9 @@ public class FishPooler : MonoBehaviour
 
     public GameObject GetFish(Vector3 spawnPosition, int? level = null)
     {
-
         int fishLevel = level ?? rs;
         checkTheFinalFish(fishLevel);
+        LevelManager.Instance.checkGoalInChallenge(fishLevel);
         if (fishPool.ContainsKey(fishLevel) && fishPool[fishLevel].Count > 0)
         {
             GameObject fish = fishPool[fishLevel].Dequeue();
@@ -119,6 +118,7 @@ public class FishPooler : MonoBehaviour
             GameManager.Instance.onWin();
         }
     }
+    
     public void ClearPool()
     {
         foreach (Transform child in FishPool)
