@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject line;
@@ -74,19 +70,12 @@ public class PlayerController : MonoBehaviour
             }
             else if (touch.phase == TouchPhase.Ended && isDrop && !LevelManager.Instance.isWaiting)
             {
+                isDrop = false;
                 fishManager.DropFish();
                 line.SetActive(false);
-                isDrop = false;
                 GameManager.Instance.updateStep();
                 Invoke("delayDrop", 1f);
             }
-        }
-
-        if (fishManager.chosenFish == null)
-        {
-            touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, waterHeight, 10));
-            fishManager.CreateFish(touchPosition);
-            setLinePosition();
         }
 
     }
@@ -95,6 +84,9 @@ public class PlayerController : MonoBehaviour
     {
         fishManager.chosenFish = null;
         isDrop = true;
+        touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, waterHeight, 10));
+        fishManager.CreateFish(touchPosition);
+        setLinePosition();
     }
 
     void checkPosition()

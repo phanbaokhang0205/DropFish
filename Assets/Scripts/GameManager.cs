@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = GameState.Playing;
         LoseCanvas.SetActive(false);
+        delayState();
     }
     public void updateScore(int level)
     {

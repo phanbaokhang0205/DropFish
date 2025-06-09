@@ -75,14 +75,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void restartData()
-    {
-        FishPooler.Instance.ClearPool();
-        FishPooler.Instance.InitializePool();
-        initData();
-        GameManager.Instance.restartGameAdvance();
-        CancelInvoke("finishGame");
-    }
+    
     void Update()
     {
         if (SceneManager.GetActiveScene().buildIndex == 2)
@@ -114,6 +107,20 @@ public class LevelManager : MonoBehaviour
 
         }
 
+    }
+
+    public void restartData()
+    {
+        FishPooler.Instance.ClearPool();
+        FishPooler.Instance.InitializePool();
+        if (currentObj)
+        {
+            Destroy(currentObj);
+        }
+        currentObj = Instantiate(levels[levelIndex]);
+        initData();
+        GameManager.Instance.restartGameAdvance();
+        CancelInvoke("finishGame");
     }
 
     public void onLoadNextLevel()

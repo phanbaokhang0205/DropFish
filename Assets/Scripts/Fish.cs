@@ -14,7 +14,6 @@ public class Fish : MonoBehaviour
 
     public bool inWater;
     public bool isDropped;
-    public bool isMerge;
     ParticleSystem splashEffect;
     bool isFlashing;
 
@@ -38,10 +37,7 @@ public class Fish : MonoBehaviour
     {
         if (!inWater)
         {
-            if (isMerge)
-            {
-                dropped();
-            }
+
         } else
         {
             if (transform.position.y < -5)
@@ -84,6 +80,7 @@ public class Fish : MonoBehaviour
                               RigidbodyConstraints.FreezeRotationZ |
                               RigidbodyConstraints.FreezeRotationY;
 
+        Debug.Log("oke" + gameObject.tag);
     }
 
 
@@ -92,7 +89,10 @@ public class Fish : MonoBehaviour
         if (other.gameObject.tag == "water")
         {
             inWater = true;
-            dropped();
+            if (!isDropped)
+            {
+                dropped();
+            }
             setsplashEffect();
         }
 
@@ -102,7 +102,6 @@ public class Fish : MonoBehaviour
             myMaterial.SetFloat("_position_X", transform.position.x);
             myMaterial.SetFloat("_startTime", Time.time);
         }
-
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -121,7 +120,6 @@ public class Fish : MonoBehaviour
         splashEffect.Play();
         AudioManager.Instance.PlayWaterDrop();
     }
-
     public void StartFlash()
     {
         if (!isFlashing && mats.Length > 1)

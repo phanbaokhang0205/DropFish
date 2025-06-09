@@ -63,7 +63,7 @@ public class FishManager : MonoBehaviour
 
                 mergeFish = FishPooler.Instance.GetFish(evolutionFish.transform.position, level + 1);
                 mergeFishScript = mergeFish.GetComponent<Fish>();
-                mergeFishScript.isMerge = true;
+                mergeFishScript.dropped();
                 GameManager.Instance.updateScore(level + 1);
                 AudioManager.Instance.PlayMergeAudio();
             }

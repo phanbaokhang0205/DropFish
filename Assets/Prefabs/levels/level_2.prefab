@@ -389,7 +389,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3831893814510525880}
   m_Layer: 0
-  m_Name: 5
+  m_Name: 90
   m_TagString: stepMove
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
