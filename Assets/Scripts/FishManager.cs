@@ -55,8 +55,16 @@ public class FishManager : MonoBehaviour
 
             if (collision1.transform.position.y > collision2.transform.position.y)
             {
-                collision1.GetComponent<Fish>().prepareToDrop();
-                collision2.GetComponent<Fish>().prepareToDrop();
+                Fish coll_1 = collision1.GetComponent<Fish>();
+                Fish coll_2 = collision2.GetComponent<Fish>();
+
+                // trước khi return kiểm tra xem có stay collide với obs nào không
+                // nếu có thì phá hủy các obs
+                // nếu không thì returncoll_1.handleBreakableObs();
+                coll_2.handleBreakableObs();
+                coll_1.prepareToDrop();
+                coll_2.prepareToDrop();
+                
                 FishPooler.Instance.ReturnFish(collision1, level);
                 FishPooler.Instance.ReturnFish(collision2, level);
 

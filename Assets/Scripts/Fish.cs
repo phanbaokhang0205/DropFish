@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 
 public class Fish : MonoBehaviour
@@ -11,6 +13,7 @@ public class Fish : MonoBehaviour
 
     [SerializeField] float flashAlpha = 130f;
     [SerializeField] float flashInterval = 0.2f;
+    [SerializeField] List<GameObject> breakableObs = new List<GameObject>();
 
     public bool inWater;
     public bool isDropped;
@@ -30,7 +33,6 @@ public class Fish : MonoBehaviour
         smr = GetComponentInChildren<SkinnedMeshRenderer>();
         mats = smr.materials;
         isFlashing = false;
-        
     }
 
     void Update()
@@ -38,7 +40,8 @@ public class Fish : MonoBehaviour
         if (!inWater)
         {
 
-        } else
+        }
+        else
         {
             if (transform.position.y < -5)
             {
@@ -79,10 +82,19 @@ public class Fish : MonoBehaviour
         fishRb.constraints = RigidbodyConstraints.FreezePositionZ |
                               RigidbodyConstraints.FreezeRotationZ |
                               RigidbodyConstraints.FreezeRotationY;
-
-        Debug.Log("oke" + gameObject.tag);
     }
 
+    public void handleBreakableObs()
+    {
+        if (breakableObs.Count != 0)
+        {
+            foreach (GameObject obs in breakableObs)
+            {
+                obs.SetActive(false);
+            }
+            breakableObs.Clear();
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -107,11 +119,24 @@ public class Fish : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         fishManager.MergeFish(gameObject, collision.gameObject);
+        if (collision.gameObject.tag == "BreakableObstacle")
+        {
+            breakableObs.Add(collision.gameObject);
+        }
     }
 
     private void OnCollisionStay(Collision collision)
     {
         fishManager.MergeFish(gameObject, collision.gameObject);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "BreakableObstacle")
+        {
+            breakableObs.Remove(collision.gameObject);
+            Debug.Log("Out Breakableee" + breakableObs.Count);
+        }
     }
 
     void setsplashEffect()

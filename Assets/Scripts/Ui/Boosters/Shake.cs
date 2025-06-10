@@ -31,7 +31,6 @@ public class Shake : MonoBehaviour, IPointerClickHandler
             GameManager.Instance.delayState();
             isShaking = true;
             Invoke("deplayShake", 2);
-
         }
     }
 

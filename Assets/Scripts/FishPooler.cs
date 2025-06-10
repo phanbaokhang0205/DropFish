@@ -76,6 +76,22 @@ public class FishPooler : MonoBehaviour
         
     }
 
+    public GameObject GetFishInUI(int level)
+    {
+        if (fishPool.ContainsKey(level) && fishPool[level].Count > 0)
+        {
+            GameObject fish = fishPool[level].Dequeue();
+
+            fish.SetActive(true);
+            return fish;
+        }
+        else
+        {
+            GameObject newFish = Instantiate(fishPrefabs[level], Vector3.zero, Quaternion.Euler(0, 90, 0));
+            newFish.SetActive(true);
+            return newFish;
+        }
+    }
 
     public void randomFish(int? level)
     {

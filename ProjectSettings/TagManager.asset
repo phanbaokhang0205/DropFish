@@ -29,6 +29,9 @@ TagManager:
   - moveLevel
   - timer
   - timerLevel
+  - BreakableObstacle
+  - StaticObstacle
+  - numerTarget
   layers:
   - Default
   - TransparentFX

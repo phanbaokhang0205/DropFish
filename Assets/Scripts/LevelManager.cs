@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.GraphicsBuffer;
 
 public class LevelManager : MonoBehaviour
 {
@@ -13,7 +15,7 @@ public class LevelManager : MonoBehaviour
     public TextMeshProUGUI targetFishTMP;
     public GameObject Timer;
     public TextMeshProUGUI timerTMP;
-
+    public int targetAmount;
     public int targetFishTag;
     public bool isWaiting;
 
@@ -21,7 +23,6 @@ public class LevelManager : MonoBehaviour
     private int levelIndex;
     private Transform gamePlay;
     private float currentTime;
-    List<int> targetList = new List<int>();
 
     private void Awake()
     {
@@ -46,13 +47,18 @@ public class LevelManager : MonoBehaviour
         isWaiting = false;
         gamePlay = levels[levelIndex].transform.Find("GamePlay");
         Transform listParent = gamePlay.GetChild(1);
+        GameObject newParent = GameObject.Find("target1");
 
-        targetList.Clear();
-        for (int i = 0; i < listParent.childCount; i++)
-        {
-            targetFishTag = GetFishLevel(listParent.GetChild(i).tag);
-            targetList.Add(targetFishTag);
-        }
+
+        targetFishTag = GetFishLevel(listParent.GetChild(0).tag);
+        GameObject targetFish = FishPooler.Instance.GetFishInUI(targetFishTag);
+
+        targetFish.transform.localScale = new Vector3(1f, 1f, 1f);    
+        targetFish.transform.SetParent(newParent.transform);
+        targetFish.transform.localPosition = new Vector3(0f, 0f, 50f);
+
+        targetFishTMP.text = listParent.GetChild(1).name;
+        targetAmount = int.Parse(listParent.GetChild(1).name);
 
         if (currentObj.CompareTag("moveLevel"))
         {
@@ -62,6 +68,7 @@ public class LevelManager : MonoBehaviour
 
             stepMoveText.text = gamePlay.GetChild(0).name;
             GameManager.Instance.step = int.Parse(stepMoveText.text);
+            Debug.Log("child name: " + gamePlay.GetChild(0).name);
 
         }
         else if (currentObj.CompareTag("timerLevel"))
@@ -83,7 +90,7 @@ public class LevelManager : MonoBehaviour
             if (currentObj.CompareTag("moveLevel"))
             {
                 stepMoveText.text = GameManager.Instance.step.ToString();
-                if (targetList.Count == 0)
+                if (targetAmount == 0)
                 {
                     isWaiting = true;
                     Invoke("onWin", 2f);
@@ -96,7 +103,7 @@ public class LevelManager : MonoBehaviour
                 {
                     currentTime = 0;
                 }
-                if (targetList.Count == 0)
+                if (targetAmount == 0)
                 {
                     isWaiting = true;
                     Invoke("onWin", 2f);
@@ -133,20 +140,12 @@ public class LevelManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == 2)
         {
-            for (int i = targetList.Count - 1; i >= 0; i--)
+            
+            if (targetFishTag == levelFish)
             {
-                if (targetList[i] == levelFish)
-                {
-                    targetList.Remove(levelFish);
-                    break;
-                }
+                targetAmount--;
+                targetFishTMP.text = targetAmount.ToString();
             }
-            string rs = "";
-            for (int i = 0; i < targetList.Count; i++)
-            {
-                rs += $"fish_{targetList[i] + 1}\n";
-            }
-            targetFishTMP.text = $"{rs}";
 
             if (currentObj.CompareTag("moveLevel"))
             {
@@ -155,7 +154,8 @@ public class LevelManager : MonoBehaviour
                     isWaiting = true;
                     Invoke("finishGame", 3f);
                 }
-            } else if (currentObj.CompareTag("timerLevel"))
+            }
+            else if (currentObj.CompareTag("timerLevel"))
             {
                 if (currentTime == 0)
                 {
@@ -171,7 +171,7 @@ public class LevelManager : MonoBehaviour
     }
     void finishGame()
     {
-        if (targetList.Count != 0)
+        if (targetAmount != 0)
         {
             GameManager.Instance.onLose();
         }

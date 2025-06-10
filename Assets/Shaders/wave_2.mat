@@ -59,6 +59,6 @@ Material:
     - _startTime: 0
     - _trigger: 0
     m_Colors:
-    - _Color: {r: 0, g: 0.14903852, b: 0.27730414, a: 1}
+    - _Color: {r: 0, g: 0.14903852, b: 0.27730414, a: 0.8901961}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
