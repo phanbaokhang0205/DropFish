@@ -88,7 +88,6 @@ public class LevelManager : MonoBehaviour
                     isWaiting = true;
                     Invoke("onWin", 2f);
                 }
-
             }
             else if (currentObj.CompareTag("timerLevel"))
             {
@@ -111,36 +110,23 @@ public class LevelManager : MonoBehaviour
 
     public void restartData()
     {
-        FishPooler.Instance.ClearPool();
-        FishPooler.Instance.InitializePool();
-        if (currentObj)
-        {
-            Destroy(currentObj);
-        }
-        currentObj = Instantiate(levels[levelIndex]);
-        initData();
-        GameManager.Instance.restartGameAdvance();
-        CancelInvoke("finishGame");
+        GameManager.Instance.restartGame();
     }
 
     public void onLoadNextLevel()
     {
-        FishPooler.Instance.ClearPool();
-        FishPooler.Instance.InitializePool();
         levelIndex++;
+        MainMenu.Instance.levelIndex = levelIndex;
         if (currentObj)
         {
             Destroy(currentObj);
         }
-
         if (levelIndex >= levels.Length)
         {
             levelIndex = 0;
+            MainMenu.Instance.levelIndex = levelIndex;
         }
-        currentObj = Instantiate(levels[levelIndex]);
-        initData();
-        GameManager.Instance.onNextLevel();
-        CancelInvoke("onWin");
+        GameManager.Instance.restartGame();
     }
 
     public void checkGoalInChallenge(int levelFish)
