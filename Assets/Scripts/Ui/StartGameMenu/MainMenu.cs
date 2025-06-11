@@ -6,9 +6,9 @@ public class MainMenu : MonoBehaviour
 {
     public static MainMenu Instance;
     public int levelIndex;
-    [SerializeField] GameObject Home;
-    [SerializeField] GameObject Chanllenge;
-    [SerializeField] GameObject Shop;
+    [SerializeField] GameObject HomeScreen;
+    [SerializeField] GameObject AdventureScreen;
+    [SerializeField] GameObject StoreScreen;
     [SerializeField] TextMeshProUGUI[] levels;
     private void Awake()
     {
@@ -27,23 +27,23 @@ public class MainMenu : MonoBehaviour
 
     public void goToHome()
     {
-        Chanllenge.SetActive(false);
-        Shop.SetActive(false);
-        Home.SetActive(true);
+        AdventureScreen.SetActive(false);
+        StoreScreen.SetActive(false);
+        HomeScreen.SetActive(true);
     }
 
     public void goToChallenge()
     {
-        Chanllenge.SetActive(true);
-        Shop.SetActive(false);
-        Home.SetActive(false);
+        AdventureScreen.SetActive(true);
+        StoreScreen.SetActive(false);
+        HomeScreen.SetActive(false);
     }
 
     public void goToShop()
     {
-        Chanllenge.SetActive(false);
-        Shop.SetActive(true);
-        Home.SetActive(false);
+        AdventureScreen.SetActive(false);
+        StoreScreen.SetActive(true);
+        HomeScreen.SetActive(false);
     }
 
     public void getLevelIndex(TextMeshProUGUI uiText)

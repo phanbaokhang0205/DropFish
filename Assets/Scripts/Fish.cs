@@ -90,8 +90,15 @@ public class Fish : MonoBehaviour
         {
             foreach (GameObject obs in breakableObs)
             {
+                LevelManager.Instance.targetObstacleAmount--;
+                if (LevelManager.Instance.targetObstacleAmount < 0)
+                {
+                    LevelManager.Instance.targetObstacleAmount = 0;
+                }
+                LevelManager.Instance.targetObstacleTMP.text = LevelManager.Instance.targetObstacleAmount.ToString();
                 obs.SetActive(false);
             }
+            
             breakableObs.Clear();
         }
     }
