@@ -19,7 +19,6 @@ public class AudioManager : MonoBehaviour
     {
         Instance = this;
         sfxSource = gameObject.AddComponent<AudioSource>();
-
         bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.loop = true;
         bgmSource.playOnAwake = false;

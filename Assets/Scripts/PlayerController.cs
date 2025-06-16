@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
                 fishManager.DropFish();
                 line.SetActive(false);
                 GameManager.Instance.updateStep();
+                Debug.Log("Step sau khi thả:" + GameManager.Instance.step);
                 Invoke("delayDrop", 1f);
             }
         }

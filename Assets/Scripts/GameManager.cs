@@ -1,19 +1,22 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager Instance;
-    public GameObject WinCanvas;
-    public GameObject LoseCanvas;
-    public GameObject PauseCanvas;
+    [SerializeField] GameObject WinCanvas;
+    [SerializeField] GameObject LoseCanvas;
+    [SerializeField] GameObject PauseCanvas;
+
+
 
     public enum GameState { Playing, Pause, Win, Lose, onChosen };
     public GameState CurrentState;
     public int score;
     public int step;
-
+    public MainMenu mainMenu;
     private void Awake()
     {
         Instance = this;
@@ -23,7 +26,8 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = GameState.Playing;
         score = 0;
-        
+        Debug.Log("Start Step trong gamemng: " + step);
+        mainMenu = MainMenu.Instance;
     }
 
     public void onWin()
@@ -50,6 +54,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         CurrentState = GameState.Playing;
         PauseCanvas.SetActive(false);
+        delayState();
     }
 
     public void onNextLevel()
@@ -78,6 +83,7 @@ public class GameManager : MonoBehaviour
     public void updateStep()
     {
         step -= 1;
+        Debug.Log("Đã trừ -1 step trong gameManager");
     }
 
     public void delayState()
@@ -95,4 +101,15 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MenuGame");
     }
+
+    public void toggleMusic(Image img)
+    {
+        mainMenu.handleMusic(img);
+    }
+
+    public void toggleSound(Image img)
+    {
+        mainMenu.handleSound(img);
+    }
+
 }

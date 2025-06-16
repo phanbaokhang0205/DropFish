@@ -1,6 +1,8 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -9,20 +11,61 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject HomeScreen;
     [SerializeField] GameObject AdventureScreen;
     [SerializeField] GameObject StoreScreen;
+    [SerializeField] GameObject SettingScreen;
     [SerializeField] TextMeshProUGUI[] levels;
+
+    [SerializeField] GameObject StartGameUI;
+    [SerializeField] GameObject NormalMode;
+    [SerializeField] GameObject AdventureMode;
+    public int currentMode;
+    private Dictionary<Image, bool> toggleStates = new Dictionary<Image, bool>();
+
+    private bool openSetting;
     private void Awake()
     {
         Instance = this;
+        openSetting = false;
     }
 
-    public void PlayGame()
+    public void PlayNormalMode()
     {
-        SceneManager.LoadSceneAsync("GamePlay");
+        StartGameUI.SetActive(false);
+        AdventureMode.SetActive(false);
+        NormalMode.SetActive(true);
+        setCurrentMode(NormalMode);
+        Debug.Log("mode:" + currentMode);
+
     }
 
-    public void PlayChallenge()
+    public void PlayAdventureMode()
     {
-        SceneManager.LoadSceneAsync("Challenge");
+        StartGameUI.SetActive(false);
+        AdventureMode.SetActive(true);
+        NormalMode.SetActive(false);
+        setCurrentMode(AdventureMode);
+        Debug.Log("mode:" + currentMode);
+    }
+
+    public void setCurrentMode(GameObject crMode)
+    {
+        if (crMode == NormalMode)
+        {
+            currentMode = 1;
+            Debug.Log("OKe 1");
+        }
+
+        if (crMode == AdventureMode)
+        {
+            currentMode = 2;
+            Debug.Log("OKe 2");
+
+        }
+        if (crMode == StartGameUI)
+        {
+            currentMode = 0;
+            Debug.Log("OKe 3");
+        }
+
     }
 
     public void goToHome()
@@ -46,6 +89,40 @@ public class MainMenu : MonoBehaviour
         HomeScreen.SetActive(false);
     }
 
+    public void handleSetting()
+    {
+        openSetting = !openSetting;
+        SettingScreen.SetActive(openSetting);
+    }
+    public void ToggleImageAlpha(Image img)
+    {
+        bool isFaded = toggleStates.ContainsKey(img) && toggleStates[img];
+
+        Color c = img.color;
+        c.a = isFaded ? 1f : 0.3f;
+        img.color = c;
+
+        toggleStates[img] = !isFaded;
+    }
+
+    public void handleMusic(Image img)
+    {
+        ToggleImageAlpha(img);
+        AudioManager.Instance.isBgmOn = !AudioManager.Instance.isBgmOn;
+        AudioManager.Instance.PlayBGM();
+    }
+
+    public void handleSound(Image img)
+    {
+        ToggleImageAlpha(img);
+        AudioManager.Instance.isWaterDropOn = !AudioManager.Instance.isWaterDropOn;
+        AudioManager.Instance.isMergepOn = !AudioManager.Instance.isMergepOn;
+    }
+
+    public void handleShake(Image img)
+    {
+        ToggleImageAlpha(img);
+    }
     public void getLevelIndex(TextMeshProUGUI uiText)
     {
         string textValue = uiText.text;
@@ -53,7 +130,7 @@ public class MainMenu : MonoBehaviour
         if (int.TryParse(textValue, out int number))
         {
             levelIndex = number - 1;
-            PlayChallenge();
+            PlayAdventureMode();
         }
         else
         {

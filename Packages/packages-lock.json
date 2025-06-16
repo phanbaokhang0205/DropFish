@@ -44,6 +44,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.device-simulator.devices": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ext.nunit": {
       "version": "2.0.5",
       "depth": 1,
@@ -229,6 +236,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.wuanc.playerprefs-editor": {
+      "version": "https://github.com/WuanC/PlayerPrefs-Editor-Tools.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "2c5b7f865eb66102473cb939a162278320e7e723"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

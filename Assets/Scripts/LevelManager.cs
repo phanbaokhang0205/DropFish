@@ -32,11 +32,12 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         isWaiting = false;
-        if (SceneManager.GetActiveScene().buildIndex == 2)
+
+        if (MainMenu.Instance.currentMode == 2)
         {
             levelIndex = MainMenu.Instance.levelIndex;
             currentObj = Instantiate(levels[levelIndex]);
-
+            Debug.Log("Start cr obj:" + currentObj);
             initData();
         }
 
@@ -84,7 +85,6 @@ public class LevelManager : MonoBehaviour
                 targetObstacleAmount = int.Parse(listParent.GetChild(2).name);
             }
         }
-        
 
         if (currentObj.CompareTag("moveLevel"))
         {
@@ -104,7 +104,6 @@ public class LevelManager : MonoBehaviour
             Timer.SetActive(true);
             Move.SetActive(false);
 
-            //Transform second = gamePlay.GetChild(2);
             currentTime = float.Parse(gamePlay.GetChild(2).name);
         }
     }
@@ -112,39 +111,12 @@ public class LevelManager : MonoBehaviour
     
     void Update()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 2)
+        if (MainMenu.Instance.currentMode == 2)
         {
             if (currentObj.CompareTag("moveLevel"))
             {
-                //if (targetFish)
-                //{
-                //    stepMoveText.text = GameManager.Instance.step.ToString();
-                //    if (targetFishAmount == 0)
-                //    {
-                //        isWaiting = true;
-                //        Invoke("onWin", 2f);
-                //    }
-                //}
-                //if (targetFish && targetObs)
-                //{
-                //    stepMoveText.text = GameManager.Instance.step.ToString();
-                //    if (targetObstacleAmount == 0 && targetFishAmount == 0)
-                //    {
-                //        isWaiting = true;
-                //        Invoke("onWin", 2f);
-                //    }
-                //}
-                //if (targetObs)
-                //{
-                //    stepMoveText.text = GameManager.Instance.step.ToString();
-                //    if (targetObstacleAmount == 0)
-                //    {
-                //        isWaiting = true;
-                //        Invoke("onWin", 2f);
-                //    }
-                //}
                 stepMoveText.text = GameManager.Instance.step.ToString();
-
+                Debug.Log(GameManager.Instance.step);
                 // Kiểm tra điều kiện thắng
                 bool hasFish = targetFish;
                 bool hasObstacle = targetObs;
@@ -181,6 +153,7 @@ public class LevelManager : MonoBehaviour
                 timerTMP.text = Mathf.CeilToInt(currentTime).ToString();
             }
         }
+
     }
 
     public void restartData()
@@ -206,7 +179,7 @@ public class LevelManager : MonoBehaviour
 
     public void checkGoalInChallenge(int levelFish)
     {
-        if (SceneManager.GetActiveScene().buildIndex == 2)
+        if (MainMenu.Instance.currentMode == 2 && currentObj)
         {
             // handle giảm fish amount
             if (targetFishTag == levelFish)
@@ -216,7 +189,6 @@ public class LevelManager : MonoBehaviour
             }
 
             // handle giảm obstacle amount
-            
             if (currentObj.CompareTag("moveLevel"))
             {
                 if (GameManager.Instance.step == 0)
