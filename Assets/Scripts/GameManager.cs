@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -6,17 +7,32 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager Instance;
-    [SerializeField] GameObject WinCanvas;
-    [SerializeField] GameObject LoseCanvas;
-    [SerializeField] GameObject PauseCanvas;
+    ///win lose pause canvas
+    [SerializeField] GameObject WinCanvasAdventure;
+    [SerializeField] GameObject LoseCanvasAdventure;
+    [SerializeField] GameObject PauseCanvasAdventure; 
+    [SerializeField] GameObject WinCanvasNormal;
+    [SerializeField] GameObject LoseCanvasNormal;
+    [SerializeField] GameObject PauseCanvasNormal;
 
+    /// live UI
+    [SerializeField] TextMeshProUGUI liveBarTMP;
+    [SerializeField] TextMeshProUGUI liveBarHomeTMP;
 
+    /// best score UI
+    [SerializeField] TextMeshProUGUI bestScoreTMP;
+    [SerializeField] TextMeshProUGUI currentScoreTMP;
+    [SerializeField] TextMeshProUGUI bestScoreLoseCanvasTMP;
+    [SerializeField] TextMeshProUGUI currentScoreLoseCanvasTMP;
 
-    public enum GameState { Playing, Pause, Win, Lose, onChosen };
+    public enum GameState { Playing, Pause, Win, Lose, onChosen, delayBeforeDrop };
     public GameState CurrentState;
     public int score;
     public int step;
-    public MainMenu mainMenu;
+    public int live;
+    public int bestScore;
+    public int currentScore;
+    public bool isCancleDelayDrop;
     private void Awake()
     {
         Instance = this;
@@ -26,54 +42,123 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = GameState.Playing;
         score = 0;
-        Debug.Log("Start Step trong gamemng: " + step);
-        mainMenu = MainMenu.Instance;
-    }
+        live = PlayerPrefsManager.GetLive();
+        setLiveText(live);
 
-    public void onWin()
+        bestScore = PlayerPrefsManager.GetBestScore();
+        setBestScore();
+
+        isCancleDelayDrop = false;
+
+    }
+    private void setLiveText(int liveValue)
+    {
+        if (liveValue >= 5)
+        {
+            liveBarTMP.text = "full";
+            liveBarHomeTMP.text = "full";
+        } else
+        {
+            liveBarTMP.text = liveValue.ToString();
+            liveBarHomeTMP.text = liveValue.ToString();
+        }
+    }
+    
+    private void setBestScore()
+    {
+        currentScore = int.Parse(currentScoreTMP.text);
+        if (currentScore > bestScore)
+        {
+            PlayerPrefsManager.SetBestScore(currentScore);
+        } else
+        {
+            PlayerPrefsManager.SetBestScore(bestScore);
+        }
+        bestScoreTMP.text = PlayerPrefsManager.GetBestScore().ToString();
+        bestScoreLoseCanvasTMP.text = PlayerPrefsManager.GetBestScore().ToString();
+        currentScoreLoseCanvasTMP.text = currentScore.ToString();
+    }
+    public void onWinAdventure()
     {
         CurrentState = GameState.Win;
-        WinCanvas.SetActive(true);
+        WinCanvasAdventure.SetActive(true);
     }
 
-    public void onLose()
+    public void onLoseAdventure()
     {
         CurrentState = GameState.Lose;
-        LoseCanvas.SetActive(true);
+        LoseCanvasAdventure.SetActive(true);
+        PlayerPrefsManager.SetLive(live-1);
+        liveBarTMP.text = PlayerPrefsManager.GetLive().ToString();
     }
 
-    public void onPause()
+    public void onPauseAdventure()
     {
         Time.timeScale = 0f;
         CurrentState = GameState.Pause;
-        PauseCanvas.SetActive(true);
+        PauseCanvasAdventure.SetActive(true);
     }
 
-    public void onResume()
+    public void onResumeAdventure()
     {
         Time.timeScale = 1f;
         CurrentState = GameState.Playing;
-        PauseCanvas.SetActive(false);
+        PauseCanvasAdventure.SetActive(false);
         delayState();
     }
 
-    public void onNextLevel()
+    public void onWinNormal()
     {
-        CurrentState = GameState.Playing;
-        WinCanvas.SetActive(false);
+        CurrentState = GameState.Win;
+        WinCanvasNormal.SetActive(true);
+        setBestScore();
     }
 
-    public void restartGame()
+    public void onLoseNormal()
+    {
+        CurrentState = GameState.Lose;
+        LoseCanvasNormal.SetActive(true);
+        setBestScore();
+    }
+
+    public void onPauseNormal()
+    {
+        Time.timeScale = 0f;
+        CurrentState = GameState.Pause;
+        PauseCanvasNormal.SetActive(true);
+    }
+
+    public void onResumeNormal()
+    {
+        Time.timeScale = 1f;
+        CurrentState = GameState.Playing;
+        PauseCanvasNormal.SetActive(false);
+        delayState();
+    }
+
+    public void onNextLevelAdventure()
+    {
+        CurrentState = GameState.Playing;
+        WinCanvasAdventure.SetActive(false);
+        delayState();
+    }
+
+    public void restartGameAdventure()
+    {
+        if (Time.timeScale == 0f)
+        {
+            Time.timeScale = 1f;
+        }
+        CurrentState = GameState.Playing;
+        LoseCanvasAdventure.SetActive(false);
+        PauseCanvasAdventure.SetActive(false);
+        delayState();
+    }
+
+    public void restartGameNormal()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void restartGameAdvance()
-    {
-        CurrentState = GameState.Playing;
-        LoseCanvas.SetActive(false);
-        delayState();
     }
     public void updateScore(int level)
     {
@@ -83,7 +168,6 @@ public class GameManager : MonoBehaviour
     public void updateStep()
     {
         step -= 1;
-        Debug.Log("Đã trừ -1 step trong gameManager");
     }
 
     public void delayState()
@@ -101,15 +185,4 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MenuGame");
     }
-
-    public void toggleMusic(Image img)
-    {
-        mainMenu.handleMusic(img);
-    }
-
-    public void toggleSound(Image img)
-    {
-        mainMenu.handleSound(img);
-    }
-
 }

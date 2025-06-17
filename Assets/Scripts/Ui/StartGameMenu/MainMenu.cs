@@ -17,8 +17,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject StartGameUI;
     [SerializeField] GameObject NormalMode;
     [SerializeField] GameObject AdventureMode;
+
     public int currentMode;
-    private Dictionary<Image, bool> toggleStates = new Dictionary<Image, bool>();
 
     private bool openSetting;
     private void Awake()
@@ -94,35 +94,7 @@ public class MainMenu : MonoBehaviour
         openSetting = !openSetting;
         SettingScreen.SetActive(openSetting);
     }
-    public void ToggleImageAlpha(Image img)
-    {
-        bool isFaded = toggleStates.ContainsKey(img) && toggleStates[img];
 
-        Color c = img.color;
-        c.a = isFaded ? 1f : 0.3f;
-        img.color = c;
-
-        toggleStates[img] = !isFaded;
-    }
-
-    public void handleMusic(Image img)
-    {
-        ToggleImageAlpha(img);
-        AudioManager.Instance.isBgmOn = !AudioManager.Instance.isBgmOn;
-        AudioManager.Instance.PlayBGM();
-    }
-
-    public void handleSound(Image img)
-    {
-        ToggleImageAlpha(img);
-        AudioManager.Instance.isWaterDropOn = !AudioManager.Instance.isWaterDropOn;
-        AudioManager.Instance.isMergepOn = !AudioManager.Instance.isMergepOn;
-    }
-
-    public void handleShake(Image img)
-    {
-        ToggleImageAlpha(img);
-    }
     public void getLevelIndex(TextMeshProUGUI uiText)
     {
         string textValue = uiText.text;

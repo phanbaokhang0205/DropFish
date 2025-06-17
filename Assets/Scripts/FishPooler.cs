@@ -67,7 +67,7 @@ public class FishPooler : MonoBehaviour
         }
         else
         {
-            GameObject newFish = Instantiate(fishPrefabs[fishLevel], spawnPosition, Quaternion.Euler(0, 90, 0));
+            GameObject newFish = Instantiate(fishPrefabs[fishLevel], spawnPosition, Quaternion.Euler(0, 90, 0), FishPool);
             newFish.SetActive(true);
             randomFish(level);
             return newFish;
@@ -87,7 +87,7 @@ public class FishPooler : MonoBehaviour
         }
         else
         {
-            GameObject newFish = Instantiate(fishPrefabs[level], Vector3.zero, Quaternion.Euler(0, 90, 0));
+            GameObject newFish = Instantiate(fishPrefabs[level], Vector3.zero, Quaternion.Euler(0, 90, 0), FishPool);
             newFish.SetActive(true);
             return newFish;
         }
@@ -131,19 +131,16 @@ public class FishPooler : MonoBehaviour
     {
         if (fishLevel == 8)
         {
-            GameManager.Instance.onWin();
+            GameManager.Instance.onWinNormal();
         }
     }
-    
+
     public void ClearPool()
     {
         foreach (Transform child in FishPool)
         {
-            Destroy(child.gameObject);
+            child.gameObject.SetActive(false);
+            child.GetComponent<Fish>().prepareToDrop();
         }
-
-        fishPool.Clear();
-        initalFishes.Clear();
     }
-
 }

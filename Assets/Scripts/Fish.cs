@@ -45,12 +45,12 @@ public class Fish : MonoBehaviour
         {
             if (transform.position.y < -5)
             {
-                GameManager.Instance.onLose();
+                GameManager.Instance.onLoseNormal();
             }
 
             if (gameObject.tag == "fish_11")
             {
-                GameManager.Instance.onWin();
+                GameManager.Instance.onWinNormal();
             }
         }
     }
@@ -69,8 +69,6 @@ public class Fish : MonoBehaviour
             RigidbodyConstraints.FreezeRotationX |
             RigidbodyConstraints.FreezeRotationY |
             RigidbodyConstraints.FreezeRotationZ;
-
-
     }
 
     public void dropped()

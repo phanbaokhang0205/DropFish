@@ -110,7 +110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 254736164475405763}
   m_Layer: 0
-  m_Name: 10
+  m_Name: 15
   m_TagString: stepMove
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

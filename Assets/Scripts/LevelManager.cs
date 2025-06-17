@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
@@ -37,11 +38,50 @@ public class LevelManager : MonoBehaviour
         {
             levelIndex = MainMenu.Instance.levelIndex;
             currentObj = Instantiate(levels[levelIndex]);
-            Debug.Log("Start cr obj:" + currentObj);
             initData();
         }
 
     }
+    void Update()
+    {
+        if (MainMenu.Instance.currentMode == 2)
+        {
+            if (currentObj.CompareTag("moveLevel"))
+            {
+                stepMoveText.text = GameManager.Instance.step.ToString();
+                // Kiểm tra điều kiện thắng
+                bool hasFish = targetFish;
+                bool hasObstacle = targetObs;
+
+                bool isFishDone = targetFishAmount == 0;
+                bool isObstacleDone = targetObstacleAmount == 0;
+
+                if ((hasFish && !hasObstacle && isFishDone) ||
+                    (!hasFish && hasObstacle && isObstacleDone) ||
+                    (hasFish && hasObstacle && isFishDone && isObstacleDone))
+                {
+                    isWaiting = true;
+                    Invoke("onWin", 2f);
+                }
+            }
+            else if (currentObj.CompareTag("timerLevel"))
+            {
+                currentTime -= Time.deltaTime;
+                if (currentTime <= 0)
+                {
+                    currentTime = 0;
+                }
+                if (targetFishAmount == 0)
+                {
+                    isWaiting = true;
+                    Invoke("onWin", 2f);
+                }
+                timerTMP.text = Mathf.CeilToInt(currentTime).ToString();
+            }
+        }
+
+    }
+
 
     private void initData()
     {
@@ -109,56 +149,29 @@ public class LevelManager : MonoBehaviour
     }
 
     
-    void Update()
+    
+
+    public void restartLevel()
     {
-        if (MainMenu.Instance.currentMode == 2)
+        if (currentObj)
         {
-            if (currentObj.CompareTag("moveLevel"))
-            {
-                stepMoveText.text = GameManager.Instance.step.ToString();
-                Debug.Log(GameManager.Instance.step);
-                // Kiểm tra điều kiện thắng
-                bool hasFish = targetFish;
-                bool hasObstacle = targetObs;
-
-                bool isFishDone = targetFishAmount == 0;
-                bool isObstacleDone = targetObstacleAmount == 0;
-
-                /**
-                 * Điều kiện thắng khi:
-                    - Chỉ có cá và cá hoàn thành
-                    - Chỉ có chướng ngại vật và nó hoàn thành
-                    - Có cả hai và cả hai đều hoàn thành
-                 */
-                if ((hasFish && !hasObstacle && isFishDone) ||
-                    (!hasFish && hasObstacle && isObstacleDone) ||
-                    (hasFish && hasObstacle && isFishDone && isObstacleDone))
-                {
-                    isWaiting = true;
-                    Invoke("onWin", 2f);
-                }
-            }
-            else if (currentObj.CompareTag("timerLevel"))
-            {
-                currentTime -= Time.deltaTime;
-                if (currentTime <= 0)
-                {
-                    currentTime = 0;
-                }
-                if (targetFishAmount == 0)
-                {
-                    isWaiting = true;
-                    Invoke("onWin", 2f);
-                }
-                timerTMP.text = Mathf.CeilToInt(currentTime).ToString();
-            }
+            Destroy(currentObj);
         }
-
-    }
-
-    public void restartData()
-    {
-        GameManager.Instance.restartGame();
+        if (levelIndex >= levels.Length)
+        {
+            levelIndex = 0;
+            MainMenu.Instance.levelIndex = levelIndex;
+        }
+        currentObj = Instantiate(levels[MainMenu.Instance.levelIndex]);
+        //Clear fish pool
+        FishPooler.Instance.ClearPool();
+        //Get fish đầu tiên
+        CancelInvoke("finishGame");
+        GameManager.Instance.isCancleDelayDrop = true;
+        Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(PlayerController.waterWidth, PlayerController.waterHeight, 10));
+        FishManager.Instance.CreateFish(touchPosition);
+        initData();
+        GameManager.Instance.restartGameAdventure();
     }
 
     public void onLoadNextLevel()
@@ -174,8 +187,22 @@ public class LevelManager : MonoBehaviour
             levelIndex = 0;
             MainMenu.Instance.levelIndex = levelIndex;
         }
-        GameManager.Instance.restartGame();
+        currentObj = Instantiate(levels[MainMenu.Instance.levelIndex]);
+        CancelInvoke("onWin");
+
+        //Clear fish pool
+        FishPooler.Instance.ClearPool();
+        GameManager.Instance.onNextLevelAdventure();
+        //Get target - move - timer
+        initData();
+        //Get fish đầu tiên
+        Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(PlayerController.waterWidth, PlayerController.waterHeight, 10));
+        FishManager.Instance.CreateFish(touchPosition);
+
+        
+
     }
+
 
     public void checkGoalInChallenge(int levelFish)
     {
@@ -209,17 +236,17 @@ public class LevelManager : MonoBehaviour
     }
     void onWin()
     {
-        GameManager.Instance.onWin();
+        GameManager.Instance.onWinAdventure();
     }
     void finishGame()
     {
         if (targetFishAmount != 0)
         {
-            GameManager.Instance.onLose();
+            GameManager.Instance.onLoseAdventure();
         }
         else
         {
-            GameManager.Instance.onWin();
+            GameManager.Instance.onWinAdventure();
         }
     }
     private int GetFishLevel(string tag)

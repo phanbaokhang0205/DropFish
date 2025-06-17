@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -11,9 +12,12 @@ public class AudioManager : MonoBehaviour
     private AudioSource sfxSource;
     private AudioSource bgmSource;
 
-    public bool isWaterDropOn = true;
-    public bool isMergepOn = true;
-    public bool isBgmOn = true;
+    //public bool isWaterDropOn = true;
+    //public bool isMergepOn = true;
+    public bool isBgmOn;
+    public bool isSoundOn;
+    [SerializeField] Image MusicImage;
+    [SerializeField] Image SoundImage;
 
     void Awake()
     {
@@ -22,17 +26,56 @@ public class AudioManager : MonoBehaviour
         bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.loop = true;
         bgmSource.playOnAwake = false;
+        isBgmOn = PlayerPrefsManager.GetMusic();
+
+    }
+
+    private void Start()
+    {
+        setColorForMusic(MusicImage);
+        setColorForSound(SoundImage);
         PlayBGM();
+    }
+
+    public void setColorForMusic(Image img)
+    {
+        bool isFaded = PlayerPrefsManager.GetMusic();
+        Debug.Log("image:" + img);
+        Color c = img.color;
+        c.a = isFaded ? 1f : 0.3f;
+        img.color = c;
+    }
+    public void handleMusic(Image img)
+    {
+        isBgmOn = !isBgmOn;
+        PlayerPrefsManager.SetMusic(isBgmOn);
+        setColorForMusic(img);
+        PlayBGM();
+    }
+
+    public void setColorForSound(Image img)
+    {
+        bool isFaded = PlayerPrefsManager.GetSound();
+        Debug.Log("image:" + img);
+        Color c = img.color;
+        c.a = isFaded ? 1f : 0.3f;
+        img.color = c;
+    }
+    public void handleSound(Image img)
+    {
+        isSoundOn = !isSoundOn;
+        PlayerPrefsManager.SetSound(isSoundOn);
+        setColorForSound(img);
     }
     public void PlayWaterDrop()
     {
-        if (isWaterDropOn)
+        if (isSoundOn)
             sfxSource.PlayOneShot(waterDropClip);
     }
 
     public void PlayMergeAudio()
     {
-        if (isMergepOn)
+        if (isSoundOn)
             sfxSource.PlayOneShot(mergeAudioClip);
     }
 

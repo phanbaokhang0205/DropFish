@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject line;
@@ -15,8 +16,8 @@ public class PlayerController : MonoBehaviour
 
     //fishTank
     private Renderer waterSize;
-    private float waterHeight;
-    private float waterWidth;
+    public static float waterHeight;
+    public static float waterWidth;
 
     private void Start()
     {
@@ -57,7 +58,6 @@ public class PlayerController : MonoBehaviour
                 fishManager.PrepareFish(touchPosition);
                 checkPosition();
                 setLinePosition();
-
             }
             else if (touch.phase == TouchPhase.Moved)
             {
@@ -74,21 +74,35 @@ public class PlayerController : MonoBehaviour
                 fishManager.DropFish();
                 line.SetActive(false);
                 GameManager.Instance.updateStep();
-                Debug.Log("Step sau khi thả:" + GameManager.Instance.step);
                 Invoke("delayDrop", 1f);
             }
         }
+        
 
     }
-
     void delayDrop()
     {
-        fishManager.chosenFish = null;
-        isDrop = true;
-        touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, waterHeight, 10));
-        fishManager.CreateFish(touchPosition);
-        setLinePosition();
+        
+        if (GameManager.Instance.isCancleDelayDrop)
+        {
+            isDrop = true;
+            GameManager.Instance.isCancleDelayDrop = true;
+            //CancelInvoke("delayDrop");
+            Debug.Log("delayBeforeDrop " + GameManager.Instance.isCancleDelayDrop);
+            Debug.Log(fishManager.chosenFish);
+            Debug.Log("isDrop : "+isDrop);
+            Debug.Log("isWaiting : " + LevelManager.Instance.isWaiting);
+        } else {
+            Debug.Log("delayBeforeDrop " + GameManager.Instance.isCancleDelayDrop);
+            fishManager.chosenFish = null;
+            isDrop = true;
+            touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, waterHeight, 10));
+            fishManager.CreateFish(touchPosition);
+            setLinePosition();
+        }
+            
     }
+
 
     void checkPosition()
     {
