@@ -25,6 +25,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI bestScoreLoseCanvasTMP;
     [SerializeField] TextMeshProUGUI currentScoreLoseCanvasTMP;
 
+    ///Coin UI
+    [SerializeField] TextMeshProUGUI homeScreenCoinTMP;
+    [SerializeField] TextMeshProUGUI normalScreenCoinTMP;
+    [SerializeField] TextMeshProUGUI adventureScreenCoinTMP;
+
+
+
     public enum GameState { Playing, Pause, Win, Lose, onChosen, delayBeforeDrop };
     public GameState CurrentState;
     public int score;
@@ -33,6 +40,7 @@ public class GameManager : MonoBehaviour
     public int bestScore;
     public int currentScore;
     public bool isCancleDelayDrop;
+    public int totalCoin;
     private void Awake()
     {
         Instance = this;
@@ -48,8 +56,20 @@ public class GameManager : MonoBehaviour
         bestScore = PlayerPrefsManager.GetBestScore();
         setBestScore();
 
+        totalCoin = PlayerPrefsManager.GetCoin();
+        homeScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
+        normalScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
+        adventureScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
         isCancleDelayDrop = false;
+    }
 
+    public void setCoinText(int coin)
+    {
+        totalCoin += coin;
+        PlayerPrefsManager.SetCoin(totalCoin);
+        homeScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
+        normalScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
+        adventureScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
     }
     private void setLiveText(int liveValue)
     {

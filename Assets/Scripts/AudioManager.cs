@@ -40,7 +40,6 @@ public class AudioManager : MonoBehaviour
     public void setColorForMusic(Image img)
     {
         bool isFaded = PlayerPrefsManager.GetMusic();
-        Debug.Log("image:" + img);
         Color c = img.color;
         c.a = isFaded ? 1f : 0.3f;
         img.color = c;

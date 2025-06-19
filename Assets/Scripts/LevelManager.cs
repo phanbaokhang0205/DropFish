@@ -1,7 +1,5 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -92,6 +90,12 @@ public class LevelManager : MonoBehaviour
         Transform fishParent = newParent.transform.GetChild(0);
         Transform obstacleParent = newParent.transform.GetChild(1);
 
+        if (targetObs)
+        {
+            Destroy(targetObs);
+            Debug.Log("Destroy thành công");
+        }
+
         // lấy fish lên UI dựa trên targetFishTag sau đó get ra từ pool
         // dùng hàm checkGoalInChallenge để kiểm tra logic merge của fish để --number -> xử lý logic win/lose
         targetFishTag = GetFishLevel(listParent.GetChild(0).tag);
@@ -111,9 +115,21 @@ public class LevelManager : MonoBehaviour
 
         // lấy obs lên UI dựa trên ... sau đó ... 
         // dùng ... để kiểm tra logic breakableObs để --number -> xử lý logic win/lose
-        if (GameObject.FindWithTag("BreakableObstacle"))
+        //Tìm obstacle trong level
+        GameObject foundObstacle = null;
+        foreach (Transform child in currentObj.transform)
         {
-            targetObs = Instantiate(GameObject.FindWithTag("BreakableObstacle"));
+            if (child.CompareTag("BreakableObstacle"))
+            {
+                foundObstacle = child.gameObject;
+                break;
+            }
+        }
+        if (foundObstacle)
+        {
+            Debug.Log("Parent of BreakableObstacle: " + GameObject.FindWithTag("BreakableObstacle").transform.parent.name);
+            Debug.Log("current level: " + currentObj.name);
+            targetObs = Instantiate(foundObstacle);
             if (targetObs)
             {
                 targetObs.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -150,7 +166,15 @@ public class LevelManager : MonoBehaviour
 
     
     
-
+    /// <summary>
+    /// Khi drop -> sau 1s -> get fish
+    /// Khi restart sau khi drop 1s -> phải CreateFish để lấy cá mới vì đã ClearPool
+    /// Khi restart ngay khi drop trong 1s -> vừa getFish sau 1s vừa CreateFish.
+    /// Giải pháp:
+    /// # cancle invoke delaydrop
+    /// # PlayerController phát tín hiệu tới LevelManager -> nếu drop sau 1s thì CreateFish
+    ///                                                    -> nếu drop trong 1s thì kh CreateFish
+    /// </summary>
     public void restartLevel()
     {
         if (currentObj)
@@ -167,15 +191,19 @@ public class LevelManager : MonoBehaviour
         FishPooler.Instance.ClearPool();
         //Get fish đầu tiên
         CancelInvoke("finishGame");
-        GameManager.Instance.isCancleDelayDrop = true;
-        Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(PlayerController.waterWidth, PlayerController.waterHeight, 10));
-        FishManager.Instance.CreateFish(touchPosition);
-        initData();
         GameManager.Instance.restartGameAdventure();
+        initData();
+        if (!GameManager.Instance.isCancleDelayDrop)
+        {
+            Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(PlayerController.waterWidth, PlayerController.waterHeight, 10));
+            FishManager.Instance.CreateFish(touchPosition);
+            Debug.Log("LVM: false ne mày");
+        }
     }
 
     public void onLoadNextLevel()
     {
+        GameManager.Instance.setCoinText(50);
         levelIndex++;
         MainMenu.Instance.levelIndex = levelIndex;
         if (currentObj)
@@ -189,7 +217,6 @@ public class LevelManager : MonoBehaviour
         }
         currentObj = Instantiate(levels[MainMenu.Instance.levelIndex]);
         CancelInvoke("onWin");
-
         //Clear fish pool
         FishPooler.Instance.ClearPool();
         GameManager.Instance.onNextLevelAdventure();
@@ -212,6 +239,10 @@ public class LevelManager : MonoBehaviour
             if (targetFishTag == levelFish)
             {
                 targetFishAmount--;
+                if (targetFishAmount <=0)
+                {
+                    targetFishAmount = 0;
+                }
                 targetFishTMP.text = targetFishAmount.ToString();
             }
 
@@ -237,6 +268,7 @@ public class LevelManager : MonoBehaviour
     void onWin()
     {
         GameManager.Instance.onWinAdventure();
+        Debug.Log("Winnn");
     }
     void finishGame()
     {
@@ -247,6 +279,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             GameManager.Instance.onWinAdventure();
+            Debug.Log("Winnn");
         }
     }
     private int GetFishLevel(string tag)

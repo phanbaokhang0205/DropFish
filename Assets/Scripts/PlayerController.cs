@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
                 fishManager.DropFish();
                 line.SetActive(false);
                 GameManager.Instance.updateStep();
+                GameManager.Instance.isCancleDelayDrop = true;
                 Invoke("delayDrop", 1f);
             }
         }
@@ -82,25 +83,13 @@ public class PlayerController : MonoBehaviour
     }
     void delayDrop()
     {
-        
-        if (GameManager.Instance.isCancleDelayDrop)
-        {
-            isDrop = true;
-            GameManager.Instance.isCancleDelayDrop = true;
-            //CancelInvoke("delayDrop");
-            Debug.Log("delayBeforeDrop " + GameManager.Instance.isCancleDelayDrop);
-            Debug.Log(fishManager.chosenFish);
-            Debug.Log("isDrop : "+isDrop);
-            Debug.Log("isWaiting : " + LevelManager.Instance.isWaiting);
-        } else {
-            Debug.Log("delayBeforeDrop " + GameManager.Instance.isCancleDelayDrop);
-            fishManager.chosenFish = null;
-            isDrop = true;
-            touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, waterHeight, 10));
-            fishManager.CreateFish(touchPosition);
-            setLinePosition();
-        }
-            
+        fishManager.chosenFish = null;
+        isDrop = true;
+        touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, waterHeight, 10));
+        fishManager.CreateFish(touchPosition);
+        setLinePosition();
+        GameManager.Instance.isCancleDelayDrop = false;
+
     }
 
 
