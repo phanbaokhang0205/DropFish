@@ -42,6 +42,7 @@ public class LevelManager : MonoBehaviour
     }
     void Update()
     {
+
         if (MainMenu.Instance.currentMode == 2)
         {
             if (currentObj.CompareTag("moveLevel"))

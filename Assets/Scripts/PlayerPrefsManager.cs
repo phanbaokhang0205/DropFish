@@ -9,6 +9,8 @@ public static class PlayerPrefsManager
     private const string LiveKey = "Live";
     private const string LastExitTimeKey = "LastExitTime";
     private const string CoinKey = "Coin";
+    private const string lastCloseTimeKey = "LasteCloseTime";
+
 
     // SOUND
     public static void SetSound(bool isOn)
@@ -74,6 +76,17 @@ public static class PlayerPrefsManager
     public static int GetCoin()
     {
         return PlayerPrefs.GetInt(CoinKey, 0);
+    }
+
+    // Last Close Time 
+    public static void SetLastCloseTime(string time)
+    {
+        PlayerPrefs.SetString(lastCloseTimeKey, time);
+    }
+
+    public static string GetLastCloseTime()
+    {
+        return PlayerPrefs.GetString(lastCloseTimeKey, "00:00");
     }
 
 }

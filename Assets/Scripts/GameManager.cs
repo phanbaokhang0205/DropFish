@@ -1,7 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +17,8 @@ public class GameManager : MonoBehaviour
     /// live UI
     [SerializeField] TextMeshProUGUI liveBarTMP;
     [SerializeField] TextMeshProUGUI liveBarHomeTMP;
+    [SerializeField] TextMeshProUGUI liveTimeTMP;
+    
 
     /// best score UI
     [SerializeField] TextMeshProUGUI bestScoreTMP;
@@ -41,6 +42,10 @@ public class GameManager : MonoBehaviour
     public int currentScore;
     public bool isCancleDelayDrop;
     public int totalCoin;
+    public float currentLiveTime;
+    const float totalLiveTime = 5f * 10f; //5 life * 10s
+    System.TimeSpan timePassed;
+    System.DateTime lastQuitTime;
     private void Awake()
     {
         Instance = this;
@@ -48,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+
         CurrentState = GameState.Playing;
         score = 0;
         live = PlayerPrefsManager.GetLive();
@@ -61,6 +67,44 @@ public class GameManager : MonoBehaviour
         normalScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
         adventureScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
         isCancleDelayDrop = false;
+        currentLiveTime = 5f;
+
+        lastQuitTime = System.DateTime.Parse(PlayerPrefsManager.GetLastCloseTime());
+        timePassed = System.DateTime.UtcNow - lastQuitTime;
+        Debug.Log("lastQuitTime: " + lastQuitTime);
+        Debug.Log("Time passed: " + timePassed.TotalSeconds);
+        Debug.Log("Time passed: " + timePassed.TotalSeconds);
+        currentLiveTime = totalLiveTime - (float)timePassed.TotalSeconds;
+
+    }
+
+    private void Update()
+    {
+        countDownLiveTime();
+        PlayerPrefsManager.SetLastCloseTime(System.DateTime.UtcNow.ToString());
+        
+        Debug.Log("DateTime:" + System.DateTime.UtcNow.Second);
+    }
+
+    public void countDownLiveTime()
+    {
+        live = PlayerPrefsManager.GetLive();
+        if (live < 5)
+        {
+            currentLiveTime -= Time.deltaTime;
+
+            int minutes = Mathf.FloorToInt(currentLiveTime / 60);
+            int seconds = Mathf.FloorToInt(currentLiveTime % 60);
+            liveTimeTMP.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+            if (currentLiveTime <= 0)
+            {
+                PlayerPrefsManager.SetLive(live + 1);
+                currentLiveTime = 5f;
+            }
+        }
+
+        setLiveText(live);
     }
 
     public void setCoinText(int coin)
@@ -75,8 +119,9 @@ public class GameManager : MonoBehaviour
     {
         if (liveValue >= 5)
         {
+            liveBarHomeTMP.text = liveValue.ToString();
             liveBarTMP.text = "full";
-            liveBarHomeTMP.text = "full";
+            liveTimeTMP.text = "full";
         } else
         {
             liveBarTMP.text = liveValue.ToString();
