@@ -56,15 +56,23 @@ public static class PlayerPrefsManager
         return PlayerPrefs.GetInt(LiveKey, 5);
     }
 
-    // LIVE
-    public static void SetLastExitTime(string time)
+    public static void SetLastExitTime(float time)
     {
-        PlayerPrefs.SetString(LastExitTimeKey, time);
+        PlayerPrefs.SetFloat(LastExitTimeKey, time);
+    }
+    public static void SetLastCloseTime(string time)
+    {
+        PlayerPrefs.SetString(lastCloseTimeKey, time);
     }
 
-    public static string GetLastExitTime()
+    public static string GetLastCloseTime()
     {
-        return PlayerPrefs.GetString(LastExitTimeKey, "0");
+        return PlayerPrefs.GetString(lastCloseTimeKey, "00:00");
+    }
+
+    public static float GetLastExitTime()
+    {
+        return PlayerPrefs.GetFloat(LastExitTimeKey, 0f);
     }
 
     // COIN
@@ -76,17 +84,6 @@ public static class PlayerPrefsManager
     public static int GetCoin()
     {
         return PlayerPrefs.GetInt(CoinKey, 0);
-    }
-
-    // Last Close Time 
-    public static void SetLastCloseTime(string time)
-    {
-        PlayerPrefs.SetString(lastCloseTimeKey, time);
-    }
-
-    public static string GetLastCloseTime()
-    {
-        return PlayerPrefs.GetString(lastCloseTimeKey, "00:00");
     }
 
 }

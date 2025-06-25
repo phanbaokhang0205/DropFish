@@ -37,13 +37,17 @@ public class GameManager : MonoBehaviour
     public GameState CurrentState;
     public int score;
     public int step;
-    public int live;
     public int bestScore;
     public int currentScore;
     public bool isCancleDelayDrop;
     public int totalCoin;
+    //live
+    const int maxLiveValue = 5;
+    const float countDownLiveTimeValue = 900f; //15:00
+
+    public int live;
+    public float liveTime; 
     public float currentLiveTime;
-    const float totalLiveTime = 5f * 10f; //5 life * 10s
     System.TimeSpan timePassed;
     System.DateTime lastQuitTime;
     private void Awake()
@@ -67,27 +71,34 @@ public class GameManager : MonoBehaviour
         normalScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
         adventureScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
         isCancleDelayDrop = false;
-        currentLiveTime = 5f;
+        // khi bật lại
+        // có được time passed
+        // có được total Seconds passed
+        // get current - timePassed.Totalseconds
+        // if (currentTime == 0)
+        // nếu kết quả phép trừ là dương thì không handle live
+        // nếu kết quả phép trừ là âm thì ((currentTime - timePassed) / totalLiveTime).lấy số dương + 1
 
-        lastQuitTime = System.DateTime.Parse(PlayerPrefsManager.GetLastCloseTime());
-        timePassed = System.DateTime.UtcNow - lastQuitTime;
-        Debug.Log("lastQuitTime: " + lastQuitTime);
-        Debug.Log("Time passed: " + timePassed.TotalSeconds);
-        Debug.Log("Time passed: " + timePassed.TotalSeconds);
-        currentLiveTime = totalLiveTime - (float)timePassed.TotalSeconds;
-
+        //currentLiveTime = totalLiveTime - (float)timePassed.TotalSeconds;
+        updateLifeWhenReopenApp();
+        currentLiveTime = PlayerPrefsManager.GetLastExitTime();
     }
 
     private void Update()
     {
         countDownLiveTime();
-        PlayerPrefsManager.SetLastCloseTime(System.DateTime.UtcNow.ToString());
         
-        Debug.Log("DateTime:" + System.DateTime.UtcNow.Second);
+        
+        //Debug.Log("DateTime:" + System.DateTime.UtcNow.Second);
     }
-
+    private void OnApplicationQuit()
+    {
+        PlayerPrefsManager.SetLastCloseTime(System.DateTime.UtcNow.ToString());
+        PlayerPrefsManager.SetLastExitTime(currentLiveTime);
+    }
     public void countDownLiveTime()
     {
+        
         live = PlayerPrefsManager.GetLive();
         if (live < 5)
         {
@@ -100,12 +111,65 @@ public class GameManager : MonoBehaviour
             if (currentLiveTime <= 0)
             {
                 PlayerPrefsManager.SetLive(live + 1);
-                currentLiveTime = 5f;
+                currentLiveTime = countDownLiveTimeValue;
+                Debug.Log("Heloo");
             }
         }
 
         setLiveText(live);
     }
+
+    public void updateLifeWhenReopenApp()
+    {
+        if (live >= maxLiveValue) return;
+
+        currentLiveTime = PlayerPrefsManager.GetLastExitTime();
+        lastQuitTime = System.DateTime.Parse(PlayerPrefsManager.GetLastCloseTime());
+        timePassed = System.DateTime.UtcNow - lastQuitTime;
+
+        liveTime = currentLiveTime - (float)timePassed.TotalSeconds;
+
+        Debug.Log("Live Time:" + liveTime);
+        Debug.Log("Curent Live Time:" + currentLiveTime);
+        
+        if (liveTime > 0)
+        {
+
+            currentLiveTime = liveTime;
+            PlayerPrefsManager.SetLastExitTime(liveTime);
+            Debug.Log("liveTime > 0");
+        } 
+        if (liveTime == 0)
+        {
+            Debug.Log("liveTime = 0");
+
+            currentLiveTime = liveTime;
+            PlayerPrefsManager.SetLastExitTime(liveTime);
+            PlayerPrefsManager.SetLive(live + 1);
+            setLiveText(live + 1);
+        }
+        if (liveTime < 0)
+        {
+            Debug.Log("liveTime < 0");
+
+            while (live < maxLiveValue && liveTime < 0)
+            {
+                liveTime += countDownLiveTimeValue;
+                live++;
+                PlayerPrefsManager.SetLive(live);
+                //Debug.Log("LiveTime ==== in While:" + liveTime);
+                //Debug.Log("Live in While:" + PlayerPrefsManager.GetLive());
+            }
+            PlayerPrefsManager.SetLastExitTime(liveTime);
+            //currentLiveTime = liveTime;
+            Debug.Log("Time remaining:" + currentLiveTime);
+
+        }
+        //Debug.Log("currentLiveTime:" + currentLiveTime);
+        //Debug.Log("timePassed.TotalSeconds:" + timePassed.TotalSeconds);
+        //Debug.Log("liveTime:" + liveTime);
+    }
+
 
     public void setCoinText(int coin)
     {
@@ -117,7 +181,7 @@ public class GameManager : MonoBehaviour
     }
     private void setLiveText(int liveValue)
     {
-        if (liveValue >= 5)
+        if (liveValue >= maxLiveValue)
         {
             liveBarHomeTMP.text = liveValue.ToString();
             liveBarTMP.text = "full";
