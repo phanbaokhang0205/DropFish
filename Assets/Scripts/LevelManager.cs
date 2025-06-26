@@ -5,7 +5,7 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
 
-    [SerializeField] GameObject[] levels;
+    [SerializeField] public GameObject[] levels;
     public GameObject Move;
     public TextMeshProUGUI stepMoveText;
     public TextMeshProUGUI targetFishTMP;
@@ -17,8 +17,8 @@ public class LevelManager : MonoBehaviour
     public int targetFishTag;
     public bool isWaiting;
 
-    private GameObject currentObj;
-    private int levelIndex;
+    public GameObject currentObj;
+    public  int levelIndex;
     private Transform gamePlay;
     private float currentTime;
     private GameObject targetObs;
@@ -31,13 +31,12 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         isWaiting = false;
-
-        if (MainMenu.Instance.currentMode == 2)
-        {
-            levelIndex = MainMenu.Instance.levelIndex;
-            currentObj = Instantiate(levels[levelIndex]);
-            initData();
-        }
+        //if (MainMenu.Instance.currentMode == 2)
+        //{
+        //    levelIndex = MainMenu.Instance.levelIndex;
+        //    currentObj = Instantiate(levels[levelIndex]);
+        //    initData();
+        //}
 
     }
     void Update()
@@ -82,7 +81,7 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    private void initData()
+    public void initData()
     {
         isWaiting = false;
         gamePlay = levels[levelIndex].transform.Find("GamePlay");

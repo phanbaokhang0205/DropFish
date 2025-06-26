@@ -185,7 +185,7 @@ public class Fish : MonoBehaviour
         while (isFlashing)
         {
             Color color = mat1.color;
-            color.a = toggle ? flashAlpha : 1f;
+            color.a = toggle ? flashAlpha : 0.7f;
             mat1.color = color;
 
             toggle = !toggle;

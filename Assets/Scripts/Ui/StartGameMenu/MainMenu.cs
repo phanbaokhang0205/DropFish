@@ -25,6 +25,7 @@ public class MainMenu : MonoBehaviour
     {
         Instance = this;
         openSetting = false;
+        Debug.Log("OKE;");
     }
 
     public void PlayNormalMode()
@@ -65,6 +66,9 @@ public class MainMenu : MonoBehaviour
         {
             currentMode = 2;
             Debug.Log("OKe 2");
+            LevelManager.Instance.levelIndex = levelIndex;
+            LevelManager.Instance.currentObj = Instantiate(LevelManager.Instance.levels[LevelManager.Instance.levelIndex]);
+            LevelManager.Instance.initData();
 
         }
         if (crMode == StartGameUI)

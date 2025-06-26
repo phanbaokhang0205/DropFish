@@ -1,6 +1,8 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI normalScreenCoinTMP;
     [SerializeField] TextMeshProUGUI adventureScreenCoinTMP;
 
+    [SerializeField] Button adventurePlayBtn;
 
 
     public enum GameState { Playing, Pause, Win, Lose, onChosen, delayBeforeDrop };
@@ -57,7 +60,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
         CurrentState = GameState.Playing;
         score = 0;
         live = PlayerPrefsManager.GetLive();
@@ -76,12 +78,9 @@ public class GameManager : MonoBehaviour
         if (PlayerPrefsManager.GetCurrentTime() == -1)
         {
             currentLiveTime = PlayerPrefsManager.GetLastExitTime();
-            Debug.Log("-11111111111111111111");
         } else
         {
             currentLiveTime = PlayerPrefsManager.GetCurrentTime();
-            Debug.Log("oke");
-
         }
     }
 
@@ -89,6 +88,13 @@ public class GameManager : MonoBehaviour
     {
         countDownLiveTime();
         PlayerPrefsManager.SetCurrentTime(currentLiveTime);
+        if (live==0)
+        {
+            adventurePlayBtn.interactable = false;
+        } else
+        {
+            adventurePlayBtn.interactable = true;
+        }
     }
     private void OnApplicationQuit()
     {
@@ -97,9 +103,13 @@ public class GameManager : MonoBehaviour
         PlayerPrefsManager.SetCurrentTime(-1);
     }
 
+
+    /// <summary>
+    /// Handle live logic
+    /// </summary>
     public void countDownLiveTime()
     {
-        
+
         live = PlayerPrefsManager.GetLive();
         if (live < 5)
         {
@@ -113,13 +123,20 @@ public class GameManager : MonoBehaviour
             {
                 PlayerPrefsManager.SetLive(live + 1);
                 currentLiveTime = countDownLiveTimeValue;
-                Debug.Log("Heloo");
             }
         }
 
         setLiveText(live);
         PlayerPrefsManager.SetLastCloseTime(System.DateTime.UtcNow.ToString());
     }
+
+    //IEnumerator Corou_1()
+    //{
+    //    while(true)
+    //    {
+
+    //    }
+    //}
 
     public void updateLifeWhenReopenApp()
     {
@@ -134,20 +151,14 @@ public class GameManager : MonoBehaviour
 
         liveTime = currentLiveTime - (float)timePassed.TotalSeconds;
 
-        Debug.Log("Live Time:" + liveTime);
-        Debug.Log("Curent Live Time:" + currentLiveTime);
-        
         if (liveTime > 0)
         {
 
             currentLiveTime = liveTime;
             PlayerPrefsManager.SetLastExitTime(liveTime);
-            Debug.Log("liveTime > 0");
         } 
         if (liveTime == 0)
         {
-            Debug.Log("liveTime = 0");
-
             currentLiveTime = liveTime;
             PlayerPrefsManager.SetLastExitTime(liveTime);
             PlayerPrefsManager.SetLive(live + 1);
@@ -155,34 +166,16 @@ public class GameManager : MonoBehaviour
         }
         if (liveTime < 0)
         {
-            Debug.Log("liveTime < 0");
-
             while (live < maxLiveValue && liveTime < 0)
             {
                 liveTime += countDownLiveTimeValue;
                 live++;
                 PlayerPrefsManager.SetLive(live);
-                //Debug.Log("LiveTime ==== in While:" + liveTime);
-                //Debug.Log("Live in While:" + PlayerPrefsManager.GetLive());
             }
             PlayerPrefsManager.SetLastExitTime(liveTime);
-            //currentLiveTime = liveTime;
-            Debug.Log("Time remaining:" + currentLiveTime);
 
         }
-        Debug.Log("currentLiveTime:" + currentLiveTime);
-        Debug.Log("timePassed.TotalSeconds:" + timePassed.TotalSeconds);
-        Debug.Log("liveTime:" + liveTime);
-    }
-
-
-    public void setCoinText(int coin)
-    {
-        totalCoin += coin;
-        PlayerPrefsManager.SetCoin(totalCoin);
-        homeScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
-        normalScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
-        adventureScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
+        
     }
     private void setLiveText(int liveValue)
     {
@@ -191,13 +184,41 @@ public class GameManager : MonoBehaviour
             liveBarHomeTMP.text = liveValue.ToString();
             liveBarTMP.text = "full";
             liveTimeTMP.text = "full";
-        } else
+        }
+        else
         {
             liveBarTMP.text = liveValue.ToString();
             liveBarHomeTMP.text = liveValue.ToString();
         }
     }
-    
+
+    /// <summary>
+    /// Handle Coin logic
+    /// </summary>
+    public void setCoinText(int coin)
+    {
+        totalCoin += coin;
+        PlayerPrefsManager.SetCoin(totalCoin);
+        homeScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
+        normalScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
+        adventureScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
+    }
+
+    public bool isAvailableCoin(int coin)
+    {
+        int avai_coin = PlayerPrefsManager.GetCoin();
+        if (coin > avai_coin)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Handle Score logic
+    /// </summary>
+
     private void setBestScore()
     {
         currentScore = int.Parse(currentScoreTMP.text);
@@ -212,6 +233,15 @@ public class GameManager : MonoBehaviour
         bestScoreLoseCanvasTMP.text = PlayerPrefsManager.GetBestScore().ToString();
         currentScoreLoseCanvasTMP.text = currentScore.ToString();
     }
+
+    public void updateScore(int level)
+    {
+        score += (level * 2 + 2);
+    }
+
+    /// <summary>
+    /// Handle GameState logic
+    /// </summary>
     public void onWinAdventure()
     {
         CurrentState = GameState.Win;
@@ -294,10 +324,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-    public void updateScore(int level)
-    {
-        score += (level * 2 + 2);
-    }
+    
 
     public void updateStep()
     {

@@ -68,7 +68,10 @@ public class AudioManager : MonoBehaviour
     public void PlayWaterDrop()
     {
         if (isSoundOn)
+        {
             sfxSource.PlayOneShot(waterDropClip);
+            Debug.Log("OKEEE");
+        }
     }
 
     public void PlayMergeAudio()

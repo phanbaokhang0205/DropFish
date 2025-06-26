@@ -24,6 +24,7 @@ public class FishManager : MonoBehaviour
 
     public void CreateFish(Vector3 spawnPosition)
     {
+
         chosenFish = FishPooler.Instance.GetFish(spawnPosition, null);
         fishScript = chosenFish.GetComponent<Fish>();
         fishScript.prepareToDrop();
