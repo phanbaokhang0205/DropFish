@@ -65,44 +65,45 @@ public class GameManager : MonoBehaviour
 
         bestScore = PlayerPrefsManager.GetBestScore();
         setBestScore();
-
+        
         totalCoin = PlayerPrefsManager.GetCoin();
         homeScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
         normalScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
         adventureScreenCoinTMP.text = PlayerPrefsManager.GetCoin().ToString();
         isCancleDelayDrop = false;
-        // khi bật lại
-        // có được time passed
-        // có được total Seconds passed
-        // get current - timePassed.Totalseconds
-        // if (currentTime == 0)
-        // nếu kết quả phép trừ là dương thì không handle live
-        // nếu kết quả phép trừ là âm thì ((currentTime - timePassed) / totalLiveTime).lấy số dương + 1
-
-        //currentLiveTime = totalLiveTime - (float)timePassed.TotalSeconds;
+        
         updateLifeWhenReopenApp();
-        currentLiveTime = PlayerPrefsManager.GetLastExitTime();
+        if (PlayerPrefsManager.GetCurrentTime() == -1)
+        {
+            currentLiveTime = PlayerPrefsManager.GetLastExitTime();
+            Debug.Log("-11111111111111111111");
+        } else
+        {
+            currentLiveTime = PlayerPrefsManager.GetCurrentTime();
+            Debug.Log("oke");
+
+        }
     }
 
     private void Update()
     {
         countDownLiveTime();
-        
-        
-        //Debug.Log("DateTime:" + System.DateTime.UtcNow.Second);
+        PlayerPrefsManager.SetCurrentTime(currentLiveTime);
     }
     private void OnApplicationQuit()
     {
         PlayerPrefsManager.SetLastCloseTime(System.DateTime.UtcNow.ToString());
         PlayerPrefsManager.SetLastExitTime(currentLiveTime);
+        PlayerPrefsManager.SetCurrentTime(-1);
     }
+
     public void countDownLiveTime()
     {
         
         live = PlayerPrefsManager.GetLive();
         if (live < 5)
         {
-            currentLiveTime -= Time.deltaTime;
+            currentLiveTime -= Time.unscaledDeltaTime;
 
             int minutes = Mathf.FloorToInt(currentLiveTime / 60);
             int seconds = Mathf.FloorToInt(currentLiveTime % 60);
@@ -117,14 +118,18 @@ public class GameManager : MonoBehaviour
         }
 
         setLiveText(live);
+        PlayerPrefsManager.SetLastCloseTime(System.DateTime.UtcNow.ToString());
     }
 
     public void updateLifeWhenReopenApp()
     {
         if (live >= maxLiveValue) return;
 
+        // currentLiveTime để lưu lại thời gian count down để hồi lại tim lúc thoát
         currentLiveTime = PlayerPrefsManager.GetLastExitTime();
+        // lastQuiTime để lưu lại thời gian lúc thoát -> tính toán thời gian đã trôi qua so với now()
         lastQuitTime = System.DateTime.Parse(PlayerPrefsManager.GetLastCloseTime());
+        
         timePassed = System.DateTime.UtcNow - lastQuitTime;
 
         liveTime = currentLiveTime - (float)timePassed.TotalSeconds;
@@ -165,9 +170,9 @@ public class GameManager : MonoBehaviour
             Debug.Log("Time remaining:" + currentLiveTime);
 
         }
-        //Debug.Log("currentLiveTime:" + currentLiveTime);
-        //Debug.Log("timePassed.TotalSeconds:" + timePassed.TotalSeconds);
-        //Debug.Log("liveTime:" + liveTime);
+        Debug.Log("currentLiveTime:" + currentLiveTime);
+        Debug.Log("timePassed.TotalSeconds:" + timePassed.TotalSeconds);
+        Debug.Log("liveTime:" + liveTime);
     }
 
 

@@ -34,7 +34,6 @@ public class MainMenu : MonoBehaviour
         NormalMode.SetActive(true);
         setCurrentMode(NormalMode);
         Debug.Log("mode:" + currentMode);
-
     }
 
     public void PlayAdventureMode()
@@ -45,7 +44,15 @@ public class MainMenu : MonoBehaviour
         setCurrentMode(AdventureMode);
         Debug.Log("mode:" + currentMode);
     }
-
+    public void GotoMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //StartGameUI.SetActive(true);
+        //AdventureMode.SetActive(false);
+        //NormalMode.SetActive(false);
+        //setCurrentMode(StartGameUI);
+    }
     public void setCurrentMode(GameObject crMode)
     {
         if (crMode == NormalMode)

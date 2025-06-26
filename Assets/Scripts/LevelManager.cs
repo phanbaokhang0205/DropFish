@@ -65,7 +65,7 @@ public class LevelManager : MonoBehaviour
             }
             else if (currentObj.CompareTag("timerLevel"))
             {
-                currentTime -= Time.deltaTime;
+                currentTime -= Time.unscaledDeltaTime;
                 if (currentTime <= 0)
                 {
                     currentTime = 0;

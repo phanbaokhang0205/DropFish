@@ -6089,9 +6089,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1547312384}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: goToMainMenu
+      - m_Target: {fileID: 1010109697}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: GotoMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7168,9 +7168,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1547312384}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: goToMainMenu
+      - m_Target: {fileID: 1010109697}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: GotoMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7791,7 +7791,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1547312384}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: goToMainMenu
+        m_MethodName: GotoMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8463,9 +8463,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1547312384}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: goToMainMenu
+      - m_Target: {fileID: 1010109697}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: GotoMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12803,7 +12803,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1547312384}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: goToMainMenu
+        m_MethodName: GotoMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16855,11 +16855,12 @@ MonoBehaviour:
   CurrentState: 0
   score: 0
   step: 0
-  live: 0
   bestScore: 0
   currentScore: 0
   isCancleDelayDrop: 0
   totalCoin: 0
+  live: 0
+  liveTime: 0
   currentLiveTime: 0
 --- !u!4 &1547312385
 Transform:
@@ -18251,9 +18252,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: goToMainMenu
+      - m_Target: {fileID: 1010109697}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: GotoMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20921,8 +20922,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -7, y: -0.0000009536743}
-  m_SizeDelta: {x: 50, y: 50}
+  m_AnchoredPosition: {x: 0.000011444092, y: -0.0000009536743}
+  m_SizeDelta: {x: 76.8854, y: 50}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1923950095
 MonoBehaviour:
