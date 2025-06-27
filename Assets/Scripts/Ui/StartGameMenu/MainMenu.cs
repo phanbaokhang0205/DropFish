@@ -25,7 +25,6 @@ public class MainMenu : MonoBehaviour
     {
         Instance = this;
         openSetting = false;
-        Debug.Log("OKE;");
     }
 
     public void PlayNormalMode()
@@ -34,7 +33,6 @@ public class MainMenu : MonoBehaviour
         AdventureMode.SetActive(false);
         NormalMode.SetActive(true);
         setCurrentMode(NormalMode);
-        Debug.Log("mode:" + currentMode);
     }
 
     public void PlayAdventureMode()
@@ -43,7 +41,6 @@ public class MainMenu : MonoBehaviour
         AdventureMode.SetActive(true);
         NormalMode.SetActive(false);
         setCurrentMode(AdventureMode);
-        Debug.Log("mode:" + currentMode);
     }
     public void GotoMainMenu()
     {
@@ -59,13 +56,11 @@ public class MainMenu : MonoBehaviour
         if (crMode == NormalMode)
         {
             currentMode = 1;
-            Debug.Log("OKe 1");
         }
 
         if (crMode == AdventureMode)
         {
             currentMode = 2;
-            Debug.Log("OKe 2");
             LevelManager.Instance.levelIndex = levelIndex;
             LevelManager.Instance.currentObj = Instantiate(LevelManager.Instance.levels[LevelManager.Instance.levelIndex]);
             LevelManager.Instance.initData();
@@ -74,7 +69,6 @@ public class MainMenu : MonoBehaviour
         if (crMode == StartGameUI)
         {
             currentMode = 0;
-            Debug.Log("OKe 3");
         }
 
     }

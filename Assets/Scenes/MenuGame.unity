@@ -2431,6 +2431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   line: {fileID: 177559422}
   water: {fileID: 85200094}
+  ab: []
 --- !u!4 &216034780
 Transform:
   m_ObjectHideFlags: 0
@@ -7434,8 +7435,12 @@ MonoBehaviour:
   backgroundClip: {fileID: 8300000, guid: 928b44a461e2bd844b5fa7aa5ecc2d3a, type: 3}
   isBgmOn: 1
   isSoundOn: 1
-  MusicImage: {fileID: 1604503848}
-  SoundImage: {fileID: 1778729526}
+  MusicImageHome: {fileID: 1486852393}
+  SoundImageHome: {fileID: 1073566530}
+  MusicImageNormal: {fileID: 1604503848}
+  SoundImageNornaml: {fileID: 1778729526}
+  MusicImageAdventure: {fileID: 347660500}
+  SoundImageAdventure: {fileID: 200796214}
 --- !u!4 &637396089
 Transform:
   m_ObjectHideFlags: 0
@@ -13656,8 +13661,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 57.361275, y: 99.41775, z: 3}
-  m_Center: {x: -20.69014, y: -0.24647708, z: 780}
+  m_Size: {x: 44.387585, y: 41.25977, z: 100}
+  m_Center: {x: -21.3612, y: 10.043016, z: 779.99994}
 --- !u!114 &1158953234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17370,7 +17375,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 57.361275, y: 99.41775, z: 3}
+  m_Size: {x: 44.38758, y: 41.25977, z: 100}
   m_Center: {x: -20.69014, y: -0.24647708, z: 780}
 --- !u!114 &1523515129
 MonoBehaviour:
@@ -19538,6 +19543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   line: {fileID: 2005208787}
   water: {fileID: 1218012274}
+  ab: []
 --- !u!4 &1685458695
 Transform:
   m_ObjectHideFlags: 0

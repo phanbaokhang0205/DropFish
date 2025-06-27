@@ -89,7 +89,7 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
         foreach (GameObject fish in fishList)
         {
             fishScript = fish.GetComponent<Fish>();
-            if (fish.activeInHierarchy)
+            if (fish.activeInHierarchy && fishScript)
             {
                 fishScript.StartFlash();
             }

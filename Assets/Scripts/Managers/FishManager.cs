@@ -59,16 +59,38 @@ public class FishManager : MonoBehaviour
                 Fish coll_1 = collision1.GetComponent<Fish>();
                 Fish coll_2 = collision2.GetComponent<Fish>();
 
+                //if (coll_1.isDataOfLevel)
+                //{
+                //    coll_1.gameObject.SetActive(false);
+                //}
+                //if (coll_2.isDataOfLevel)
+                //{
+                //    coll_2.gameObject.SetActive(false);
+                //}
                 // trước khi return kiểm tra xem có stay collide với obs nào không
                 // nếu có thì phá hủy các obs
                 // nếu không thì returncoll_1.handleBreakableObs();
                 coll_2.handleBreakableObs();
+                coll_1.handleBreakableObs();
                 coll_1.prepareToDrop();
                 coll_2.prepareToDrop();
-                
-                FishPooler.Instance.ReturnFish(collision1, level);
-                FishPooler.Instance.ReturnFish(collision2, level);
+                if (coll_1.isDataOfLevel)
+                {
+                    coll_1.gameObject.SetActive(false);
+                    FishPooler.Instance.ReturnFish(collision2, level);
+                }
+                else if (coll_2.isDataOfLevel)
+                {
+                    coll_2.gameObject.SetActive(false);
+                    FishPooler.Instance.ReturnFish(collision1, level);
 
+                }
+                else
+                {
+                    FishPooler.Instance.ReturnFish(collision1, level);
+                    FishPooler.Instance.ReturnFish(collision2, level);
+
+                }
 
                 mergeFish = FishPooler.Instance.GetFish(evolutionFish.transform.position, level + 1);
                 mergeFishScript = mergeFish.GetComponent<Fish>();

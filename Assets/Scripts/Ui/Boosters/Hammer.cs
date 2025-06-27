@@ -50,23 +50,35 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag.StartsWith("fish"))
-        {
-            target = other.gameObject;
-            Debug.Log("In " + other.tag);
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.tag.StartsWith("fish"))
+    //    {
+    //        if(target && fishScript)
+    //        {
+    //            Debug.Log("Xoas target: " + target.tag);
+    //            fishScript.StopFlash();
+    //            target = null;
+    //            fishScript = null;
+    //        }
+    //        target = other.gameObject;
+    //        Debug.Log("Laay tarrget:" + target.tag);
+    //    }
+    //}
     private void OnTriggerStay(Collider other)
     {
-        if (target)
-        {
-            fishScript = target.GetComponent<Fish>();
-            fishScript.StartFlash();
-            Debug.Log("Stay " + other.tag);
+        if (!other.tag.StartsWith("fish")) return;
 
-        }
+        if (target == other.gameObject) return;
+
+        if (fishScript)
+            fishScript.StopFlash();
+
+        target = other.gameObject;
+        fishScript = target.GetComponent<Fish>();
+        fishScript.StartFlash();
+
+        Debug.Log("StartFlash on new fish: " + target.name);
     }
 
     private void OnTriggerExit(Collider other)
@@ -74,11 +86,9 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
         if (fishScript)
         {
             fishScript.StopFlash();
-            Debug.Log("Out " + other.tag);
-        }
+        }   
         target = null;
         fishScript = null;
-
     }
     public void OnEndDrag(PointerEventData eventData)
     {

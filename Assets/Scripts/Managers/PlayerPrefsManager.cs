@@ -21,7 +21,7 @@ public static class PlayerPrefsManager
 
     public static bool GetSound()
     {
-        return PlayerPrefs.GetInt(SoundKey, 1) == 1; // mặc định là bật
+        return PlayerPrefs.GetInt(SoundKey, 1) == 1;
     }
 
     // MUSIC

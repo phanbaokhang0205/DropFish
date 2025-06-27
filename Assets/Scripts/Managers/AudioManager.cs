@@ -16,8 +16,14 @@ public class AudioManager : MonoBehaviour
     //public bool isMergepOn = true;
     public bool isBgmOn;
     public bool isSoundOn;
-    [SerializeField] Image MusicImage;
-    [SerializeField] Image SoundImage;
+    [SerializeField] Image MusicImageHome;
+    [SerializeField] Image SoundImageHome;
+
+    [SerializeField] Image MusicImageNormal;
+    [SerializeField] Image SoundImageNornaml;
+
+    [SerializeField] Image MusicImageAdventure;
+    [SerializeField] Image SoundImageAdventure;
 
     void Awake()
     {
@@ -32,8 +38,12 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        setColorForMusic(MusicImage);
-        setColorForSound(SoundImage);
+        setColorForMusic(MusicImageHome);
+        setColorForSound(SoundImageHome);
+        setColorForMusic(MusicImageNormal);
+        setColorForSound(SoundImageNornaml);
+        setColorForMusic(MusicImageAdventure);
+        setColorForSound(SoundImageAdventure);
         PlayBGM();
     }
 
@@ -58,25 +68,26 @@ public class AudioManager : MonoBehaviour
         Color c = img.color;
         c.a = isFaded ? 1f : 0.3f;
         img.color = c;
+
     }
     public void handleSound(Image img)
     {
         isSoundOn = !isSoundOn;
         PlayerPrefsManager.SetSound(isSoundOn);
         setColorForSound(img);
+
     }
     public void PlayWaterDrop()
     {
-        if (isSoundOn)
+        if (PlayerPrefsManager.GetSound())
         {
             sfxSource.PlayOneShot(waterDropClip);
-            Debug.Log("OKEEE");
         }
     }
 
     public void PlayMergeAudio()
     {
-        if (isSoundOn)
+        if (PlayerPrefsManager.GetSound())
             sfxSource.PlayOneShot(mergeAudioClip);
     }
 

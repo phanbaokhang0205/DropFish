@@ -618,7 +618,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9064141665642312100}
   m_Layer: 0
-  m_Name: 5
+  m_Name: 15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2289,6 +2289,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7894280629293536162}
     m_Modifications:
+    - target: {fileID: 1981225504677168422, guid: 3463295f924a73949a0e1408d78911e9, type: 3}
+      propertyPath: isDataOfLevel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6333960082283685455, guid: 3463295f924a73949a0e1408d78911e9, type: 3}
       propertyPath: m_Name
       value: fish_1 (2)
@@ -2351,6 +2355,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7894280629293536162}
     m_Modifications:
+    - target: {fileID: 1981225504677168422, guid: 3463295f924a73949a0e1408d78911e9, type: 3}
+      propertyPath: isDataOfLevel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6333960082283685455, guid: 3463295f924a73949a0e1408d78911e9, type: 3}
       propertyPath: m_Name
       value: fish_1
@@ -2413,6 +2421,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7894280629293536162}
     m_Modifications:
+    - target: {fileID: 1981225504677168422, guid: 3463295f924a73949a0e1408d78911e9, type: 3}
+      propertyPath: isDataOfLevel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6333960082283685455, guid: 3463295f924a73949a0e1408d78911e9, type: 3}
       propertyPath: m_Name
       value: fish_1 (1)

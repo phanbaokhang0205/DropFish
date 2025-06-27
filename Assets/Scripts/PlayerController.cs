@@ -1,5 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using UnityEngine;
+using System.Collections.Generic;
+
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject line;
@@ -92,6 +95,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    [SerializeField] List<GameObject> ab;
 
     void checkPosition()
     {

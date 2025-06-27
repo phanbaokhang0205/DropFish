@@ -17,6 +17,7 @@ public class Fish : MonoBehaviour
 
     public bool inWater;
     public bool isDropped;
+    public bool isDataOfLevel = false;
     ParticleSystem splashEffect;
     bool isFlashing;
 
@@ -86,19 +87,22 @@ public class Fish : MonoBehaviour
     {
         if (breakableObs.Count != 0)
         {
+            Debug.Log("Fish: " + tag + ", total = " + breakableObs.Count);
             foreach (GameObject obs in breakableObs)
             {
+                obs.SetActive(false);
                 LevelManager.Instance.targetObstacleAmount--;
+                Debug.Log("Fish: " + tag + ", obs = " + breakableObs.Count);
                 if (LevelManager.Instance.targetObstacleAmount < 0)
                 {
                     LevelManager.Instance.targetObstacleAmount = 0;
                 }
                 LevelManager.Instance.targetObstacleTMP.text = LevelManager.Instance.targetObstacleAmount.ToString();
-                obs.SetActive(false);
             }
             
             breakableObs.Clear();
         }
+
     }
 
     private void OnTriggerEnter(Collider other)

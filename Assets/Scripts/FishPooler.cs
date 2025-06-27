@@ -59,8 +59,8 @@ public class FishPooler : MonoBehaviour
         LevelManager.Instance.checkGoalInChallenge(fishLevel);
         if (fishPool.ContainsKey(fishLevel) && fishPool[fishLevel].Count > 0)
         {
+
             GameObject fish = fishPool[fishLevel].Dequeue();
-            
             fish.transform.position = spawnPosition;
             fish.SetActive(true);
             randomFish(level);
@@ -144,4 +144,5 @@ public class FishPooler : MonoBehaviour
             child.GetComponent<Fish>().prepareToDrop();
         }
     }
+
 }

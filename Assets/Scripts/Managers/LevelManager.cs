@@ -64,7 +64,7 @@ public class LevelManager : MonoBehaviour
             }
             else if (currentObj.CompareTag("timerLevel"))
             {
-                currentTime -= Time.unscaledDeltaTime;
+                currentTime -= Time.deltaTime;
                 if (currentTime <= 0)
                 {
                     currentTime = 0;
@@ -89,7 +89,10 @@ public class LevelManager : MonoBehaviour
         GameObject newParent = GameObject.Find("target1");
         Transform fishParent = newParent.transform.GetChild(0);
         Transform obstacleParent = newParent.transform.GetChild(1);
-
+        if (targetFish)
+        {
+            targetFish.SetActive(false);
+        }
         if (targetObs)
         {
             Destroy(targetObs);
@@ -197,7 +200,6 @@ public class LevelManager : MonoBehaviour
         {
             Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(PlayerController.waterWidth, PlayerController.waterHeight, 10));
             FishManager.Instance.CreateFish(touchPosition);
-            Debug.Log("LVM: false ne mày");
         }
     }
 
