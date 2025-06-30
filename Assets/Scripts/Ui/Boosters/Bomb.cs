@@ -62,18 +62,27 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
         BombGrid.transform.position = initBombGridPosition;
         GameManager.Instance.CurrentState = GameManager.GameState.Playing;
 
-        foreach (GameObject fish in fishList)
+        if (fishList.Count != 0)
         {
-            fish.SetActive(false);
+            Debug.Log("Xóaaa");
+            foreach (GameObject fish in fishList)
+            {
+                fish.SetActive(false);
+            }
+            fishList.Clear();
+            if (!flat) return;
+            else
+            {
+                GameManager.Instance.setCoinText(-price);
+            }
         }
-        fishList.Clear();
-
-        //Trừ tiền
-        if (!flat) return;
         else
         {
-            GameManager.Instance.setCoinText(-price);
+            Debug.Log("KHông cxoasa");
         }
+
+        //Trừ tiền
+        
         GameManager.Instance.delayState();
     }
     private void OnTriggerEnter(Collider other)

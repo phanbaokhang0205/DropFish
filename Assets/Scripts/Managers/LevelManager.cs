@@ -1,5 +1,7 @@
-﻿using TMPro;
+﻿using NUnit.Framework;
+using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour
 {
@@ -18,11 +20,16 @@ public class LevelManager : MonoBehaviour
     public bool isWaiting;
 
     public GameObject currentObj;
-    public  int levelIndex;
+    public int levelIndex;
+    private Transform obs_list;
     private Transform gamePlay;
+
+    public List<GameObject> obstacleList;
     private float currentTime;
     private GameObject targetObs;
     private GameObject targetFish;
+
+
     private void Awake()
     {
         Instance = this;
@@ -30,18 +37,11 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        levels = Resources.LoadAll<GameObject>("levels");
         isWaiting = false;
-        //if (MainMenu.Instance.currentMode == 2)
-        //{
-        //    levelIndex = MainMenu.Instance.levelIndex;
-        //    currentObj = Instantiate(levels[levelIndex]);
-        //    initData();
-        //}
-
     }
     void Update()
     {
-
         if (MainMenu.Instance.currentMode == 2)
         {
             if (currentObj.CompareTag("moveLevel"))
@@ -53,7 +53,7 @@ public class LevelManager : MonoBehaviour
 
                 bool isFishDone = targetFishAmount == 0;
                 bool isObstacleDone = targetObstacleAmount == 0;
-
+                
                 if ((hasFish && !hasObstacle && isFishDone) ||
                     (!hasFish && hasObstacle && isObstacleDone) ||
                     (hasFish && hasObstacle && isFishDone && isObstacleDone))
@@ -61,6 +61,7 @@ public class LevelManager : MonoBehaviour
                     isWaiting = true;
                     Invoke("onWin", 2f);
                 }
+                
             }
             else if (currentObj.CompareTag("timerLevel"))
             {
@@ -80,11 +81,38 @@ public class LevelManager : MonoBehaviour
 
     }
 
+    public void setObstacleAmount()
+    {
+        
+        if (!obs_list) return;
+        int activeCount = 0;
+
+        foreach (Transform child in obs_list)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                activeCount++;
+            }
+        }
+        Debug.Log("Số lượng obstacle đang active: " + activeCount);
+        targetObstacleAmount = activeCount;
+        targetObstacleTMP.text = targetObstacleAmount.ToString();
+
+    }
 
     public void initData()
     {
+        Debug.Log("Helloo init");
         isWaiting = false;
         gamePlay = levels[levelIndex].transform.Find("GamePlay");
+        //obs_list = levels[levelIndex].transform.Find("obs_list");
+        obs_list = currentObj.transform.Find("obs_list");
+        if (obs_list)
+        {
+
+            targetObstacleTMP.text = obstacleList.Count.ToString();
+            targetObstacleAmount = obstacleList.Count;
+        }
         Transform listParent = gamePlay.GetChild(1);
         GameObject newParent = GameObject.Find("target1");
         Transform fishParent = newParent.transform.GetChild(0);
@@ -118,32 +146,40 @@ public class LevelManager : MonoBehaviour
 
         // lấy obs lên UI dựa trên ... sau đó ... 
         // dùng ... để kiểm tra logic breakableObs để --number -> xử lý logic win/lose
-        //Tìm obstacle trong level
+        //Tìm obstacle trong level để hiển thị lên target
         GameObject foundObstacle = null;
-        foreach (Transform child in currentObj.transform)
+       
+        if (obs_list)
         {
-            if (child.CompareTag("BreakableObstacle"))
+            foreach (Transform child in obs_list)
             {
                 foundObstacle = child.gameObject;
+                Debug.Log("OKEEEE");
                 break;
             }
-        }
-        if (foundObstacle)
-        {
-            Debug.Log("Parent of BreakableObstacle: " + GameObject.FindWithTag("BreakableObstacle").transform.parent.name);
-            Debug.Log("current level: " + currentObj.name);
-            targetObs = Instantiate(foundObstacle);
-            if (targetObs)
+
+            if (foundObstacle)
             {
-                targetObs.transform.localScale = new Vector3(1f, 1f, 1f);
-                targetObs.transform.SetParent(obstacleParent);
-                targetObs.transform.localPosition = new Vector3(0f, 0f, 50f);
-                Rigidbody obs_rb = targetObs.GetComponent<Rigidbody>();
-                Destroy(obs_rb);
-                targetObstacleTMP.text = listParent.GetChild(2).name;
-                targetObstacleAmount = int.Parse(listParent.GetChild(2).name);
+                Debug.Log("Parent of BreakableObstacle: " + GameObject.FindWithTag("BreakableObstacle").transform.parent.name);
+                Debug.Log("current level: " + currentObj.name);
+
+                targetObs = Instantiate(foundObstacle);
+                if (targetObs)
+                {
+                    targetObs.transform.localScale = new Vector3(1f, 1f, 1f);
+                    targetObs.transform.SetParent(obstacleParent);
+                    targetObs.transform.localPosition = new Vector3(0f, 0f, 50f);
+                    Rigidbody obs_rb = targetObs.GetComponent<Rigidbody>();
+                    Destroy(obs_rb);
+                    targetObstacleTMP.text = listParent.GetChild(2).name;
+                    targetObstacleAmount = int.Parse(listParent.GetChild(2).name);
+                    Debug.Log("asdsadsa:" + obstacleList.Count);
+                }
             }
         }
+        
+
+
 
         if (currentObj.CompareTag("moveLevel"))
         {
@@ -167,8 +203,8 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    
-    
+
+
     /// <summary>
     /// Khi drop -> sau 1s -> get fish
     /// Khi restart sau khi drop 1s -> phải CreateFish để lấy cá mới vì đã ClearPool
@@ -193,7 +229,7 @@ public class LevelManager : MonoBehaviour
         //Clear fish pool
         FishPooler.Instance.ClearPool();
         //Get fish đầu tiên
-        CancelInvoke("finishGame");
+        CancelInvoke(nameof(finishGame));
         GameManager.Instance.restartGameAdventure();
         initData();
         if (!GameManager.Instance.isCancleDelayDrop)
@@ -218,7 +254,7 @@ public class LevelManager : MonoBehaviour
             MainMenu.Instance.levelIndex = levelIndex;
         }
         currentObj = Instantiate(levels[MainMenu.Instance.levelIndex]);
-        CancelInvoke("onWin");
+        CancelInvoke(nameof(onWin));
         //Clear fish pool
         FishPooler.Instance.ClearPool();
         GameManager.Instance.onNextLevelAdventure();
@@ -228,7 +264,7 @@ public class LevelManager : MonoBehaviour
         Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(PlayerController.waterWidth, PlayerController.waterHeight, 10));
         FishManager.Instance.CreateFish(touchPosition);
 
-        
+        PlayerController.Instance.setLinePosition();
 
     }
 
@@ -241,7 +277,7 @@ public class LevelManager : MonoBehaviour
             if (targetFishTag == levelFish)
             {
                 targetFishAmount--;
-                if (targetFishAmount <=0)
+                if (targetFishAmount <= 0)
                 {
                     targetFishAmount = 0;
                 }
@@ -270,18 +306,21 @@ public class LevelManager : MonoBehaviour
     void onWin()
     {
         GameManager.Instance.onWinAdventure();
-        Debug.Log("Winnn");
     }
     void finishGame()
     {
-        if (targetFishAmount != 0)
+        
+        if (targetFishAmount == 0 && targetObstacleAmount == 0)
         {
-            GameManager.Instance.onLoseAdventure();
+            Debug.Log("AMOUNT:" + targetObstacleAmount + ":::" + targetFishAmount);
+            GameManager.Instance.onWinAdventure();
+            Debug.Log("Winnn");
+            
         }
         else
         {
-            GameManager.Instance.onWinAdventure();
-            Debug.Log("Winnn");
+            GameManager.Instance.onLoseAdventure();
+            Debug.Log("AMOUNT:" + targetObstacleAmount + ":::" + targetFishAmount);
         }
     }
     private int GetFishLevel(string tag)
@@ -289,5 +328,5 @@ public class LevelManager : MonoBehaviour
         string[] parts = tag.Split('_');
         return int.Parse(parts[1]) - 1;
     }
-    
+
 }

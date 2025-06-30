@@ -458,12 +458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e313592372bb94cbb4b6d156e12d23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levels:
-  - {fileID: 5170621741878186391, guid: 6b4bc29fca2e45c4d9626b4560c179e5, type: 3}
-  - {fileID: 1309710803708001006, guid: 0ca4e9f83dda2454b8c55bd1bf03b685, type: 3}
-  - {fileID: 6503943396543878734, guid: 17a8729527df4d144ab938dc16d4ea9b, type: 3}
-  - {fileID: 6503943396543878734, guid: c99555c817040b649bb5d2bb69701021, type: 3}
-  - {fileID: 6503943396543878734, guid: 4891d88e2e637904c93265e1dbb6de97, type: 3}
+  levels: []
   Move: {fileID: 337024462}
   stepMoveText: {fileID: 864254009}
   targetFishTMP: {fileID: 284380561}
@@ -476,6 +471,7 @@ MonoBehaviour:
   isWaiting: 0
   currentObj: {fileID: 0}
   levelIndex: 0
+  obstacleList: []
 --- !u!4 &60296546
 Transform:
   m_ObjectHideFlags: 0

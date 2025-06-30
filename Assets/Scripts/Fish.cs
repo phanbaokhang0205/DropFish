@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 
@@ -87,21 +88,22 @@ public class Fish : MonoBehaviour
     {
         if (breakableObs.Count != 0)
         {
-            Debug.Log("Fish: " + tag + ", total = " + breakableObs.Count);
+            //Debug.Log("Fish: " + tag + ", total = " + breakableObs.Count);
             foreach (GameObject obs in breakableObs)
             {
+                //Debug.Log(obs.name);
                 obs.SetActive(false);
-                LevelManager.Instance.targetObstacleAmount--;
-                Debug.Log("Fish: " + tag + ", obs = " + breakableObs.Count);
-                if (LevelManager.Instance.targetObstacleAmount < 0)
-                {
-                    LevelManager.Instance.targetObstacleAmount = 0;
-                }
-                LevelManager.Instance.targetObstacleTMP.text = LevelManager.Instance.targetObstacleAmount.ToString();
+                //LevelManager.Instance.targetObstacleAmount--;
+                //Debug.LogError("ádasdasdasasdasđ");
+                //if (LevelManager.Instance.targetObstacleAmount < 0)
+                //{
+                //    LevelManager.Instance.targetObstacleAmount = 0;
+                //}
+                //LevelManager.Instance.targetObstacleTMP.text = LevelManager.Instance.targetObstacleAmount.ToString();
             }
-            
             breakableObs.Clear();
         }
+        LevelManager.Instance.setObstacleAmount();
 
     }
 
@@ -131,12 +133,13 @@ public class Fish : MonoBehaviour
         if (collision.gameObject.tag == "BreakableObstacle")
         {
             breakableObs.Add(collision.gameObject);
+            Debug.LogWarning(collision.gameObject.name);
         }
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        fishManager.MergeFish(gameObject, collision.gameObject);
+        //fishManager.MergeFish(gameObject, collision.gameObject);
     }
 
     private void OnCollisionExit(Collision collision)

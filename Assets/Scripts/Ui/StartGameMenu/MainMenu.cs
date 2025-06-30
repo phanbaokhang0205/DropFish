@@ -45,6 +45,10 @@ public class MainMenu : MonoBehaviour
     public void GotoMainMenu()
     {
         Time.timeScale = 1f;
+        if (GameManager.Instance.CurrentState == GameManager.GameState.Win)
+        {
+            GameManager.Instance.setCoinText(50);
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         //StartGameUI.SetActive(true);
         //AdventureMode.SetActive(false);

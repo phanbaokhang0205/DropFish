@@ -3,7 +3,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+/// <summary>
+/// - obstacle bug
+/// - claim coin bug
+/// - set fish line bug
+/// - booster cost bug
+/// </summary>
 public class GameManager : MonoBehaviour
 {
 
@@ -60,6 +65,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 120;
+
         CurrentState = GameState.Playing;
         score = 0;
         live = PlayerPrefsManager.GetLive();
@@ -95,12 +102,13 @@ public class GameManager : MonoBehaviour
         {
             adventurePlayBtn.interactable = true;
         }
+
     }
     private void OnApplicationQuit()
     {
         PlayerPrefsManager.SetLastCloseTime(System.DateTime.UtcNow.ToString());
         PlayerPrefsManager.SetLastExitTime(currentLiveTime);
-        PlayerPrefsManager.SetCurrentTime(-1);
+        PlayerPrefsManager.SetCurrentTime(-1);  
     }
 
 

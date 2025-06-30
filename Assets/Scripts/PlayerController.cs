@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
     [SerializeField] GameObject line;
     [SerializeField] GameObject water;
 
@@ -21,6 +23,10 @@ public class PlayerController : MonoBehaviour
     private Renderer waterSize;
     public static float waterHeight;
     public static float waterWidth;
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -116,7 +122,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void setLinePosition()
+    public void setLinePosition()
     {
         float objectHeight = rendLine.bounds.size.y;
         Vector3 newLinePosition = line.transform.position;

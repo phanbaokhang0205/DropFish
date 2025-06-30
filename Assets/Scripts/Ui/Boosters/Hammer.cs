@@ -28,17 +28,23 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        GameManager.Instance.CurrentState = GameManager.GameState.onChosen;
+        //flat = GameManager.Instance.isAvailableCoin(price);
+        if (!flat) return;
+        else
+        {
+            GameManager.Instance.CurrentState = GameManager.GameState.onChosen;
+        }
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        
+
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        flat = GameManager.Instance.isAvailableCoin(price);
+        //flat = GameManager.Instance.isAvailableCoin(price);
 
         // Lấy vị trí
         if (!flat) return;
@@ -86,7 +92,7 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
         if (fishScript)
         {
             fishScript.StopFlash();
-        }   
+        }
         target = null;
         fishScript = null;
     }
@@ -99,12 +105,13 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
             fishScript = target.GetComponent<Fish>();
             fishScript.StopFlash();
 
+            if (!flat) return;
+            else
+            {
+                GameManager.Instance.setCoinText(-price);
+            }
         }
-        if (!flat) return;
-        else
-        {
-            GameManager.Instance.setCoinText(-price);
-        }
+        
         GameManager.Instance.delayState();
     }
 
