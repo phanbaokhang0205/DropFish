@@ -42,6 +42,16 @@ public class MainMenu : MonoBehaviour
         NormalMode.SetActive(false);
         setCurrentMode(AdventureMode);
     }
+
+    public void PlayLastestLevel()
+    {
+        StartGameUI.SetActive(false);
+        AdventureMode.SetActive(true);
+        NormalMode.SetActive(false);
+        currentMode = 2;
+        LevelManager.Instance.currentObj = Instantiate(LevelManager.Instance.levels[PlayerPrefsManager.GetUnLockedLevel() - 1]);
+        LevelManager.Instance.initData();
+    }
     public void GotoMainMenu()
     {
         Time.timeScale = 1f;
@@ -65,9 +75,11 @@ public class MainMenu : MonoBehaviour
         if (crMode == AdventureMode)
         {
             currentMode = 2;
-            LevelManager.Instance.levelIndex = levelIndex;
-            LevelManager.Instance.currentObj = Instantiate(LevelManager.Instance.levels[LevelManager.Instance.levelIndex]);
+            //LevelManager.Instance.levelIndex = levelIndex;
+            //LevelManager.Instance.levelIndex = PlayerPrefsManager.GetCurrentLevel();
+            LevelManager.Instance.currentObj = Instantiate(LevelManager.Instance.levels[PlayerPrefsManager.GetCurrentLevel() - 1]);
             LevelManager.Instance.initData();
+            Debug.Log(LevelManager.Instance.levelIndex);
 
         }
         if (crMode == StartGameUI)
@@ -103,6 +115,21 @@ public class MainMenu : MonoBehaviour
         openSetting = !openSetting;
         SettingScreen.SetActive(openSetting);
     }
+
+    //public void getLevelIndex(TextMeshProUGUI uiText)
+    //{
+    //    string textValue = uiText.text;
+
+    //    if (int.TryParse(textValue, out int number))
+    //    {
+    //        levelIndex = number - 1;
+    //        PlayAdventureMode();
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("Không chuyển được sang int");
+    //    }
+    //}
 
     public void getLevelIndex(TextMeshProUGUI uiText)
     {

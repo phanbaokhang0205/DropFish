@@ -342,7 +342,7 @@ public class GameManager : MonoBehaviour
     public void delayState()
     {
         CurrentState = GameState.onChosen;
-        Invoke("deplayStateInvoke", 0.1f);
+        Invoke(nameof(deplayStateInvoke), 0.1f);
     }
     private void deplayStateInvoke()
     {

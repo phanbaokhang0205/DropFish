@@ -57,7 +57,6 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
     public void OnEndDrag(PointerEventData eventData)
     {
         //Xóa cá
-        Debug.Log(transform.position);
         transform.position = initPosition;
         BombGrid.transform.position = initBombGridPosition;
         GameManager.Instance.CurrentState = GameManager.GameState.Playing;

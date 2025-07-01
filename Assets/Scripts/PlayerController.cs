@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
                 line.SetActive(false);
                 GameManager.Instance.updateStep();
                 GameManager.Instance.isCancleDelayDrop = true;
-                Invoke("delayDrop", 1f);
+                Invoke(nameof(delayDrop), 1f);
             }
         }
         

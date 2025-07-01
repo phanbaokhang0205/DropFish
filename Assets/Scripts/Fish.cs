@@ -133,7 +133,6 @@ public class Fish : MonoBehaviour
         if (collision.gameObject.tag == "BreakableObstacle")
         {
             breakableObs.Add(collision.gameObject);
-            Debug.LogWarning(collision.gameObject.name);
         }
     }
 

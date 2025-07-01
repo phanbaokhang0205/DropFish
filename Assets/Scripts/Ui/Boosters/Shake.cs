@@ -39,7 +39,7 @@ public class Shake : MonoBehaviour, IPointerClickHandler
             isShaking = true;
             
             GameManager.Instance.setCoinText(-price);
-            Invoke("deplayShake", 2);
+            Invoke(nameof(deplayShake), 2);
         }
     }
 

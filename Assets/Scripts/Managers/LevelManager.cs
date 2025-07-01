@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -8,6 +7,10 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance;
 
     [SerializeField] public GameObject[] levels;
+    [SerializeField] GameObject ContentView;
+    [SerializeField] GameObject LevelSample;
+    [SerializeField] TextMeshProUGUI LevelSampleText;
+
     public GameObject Move;
     public TextMeshProUGUI stepMoveText;
     public TextMeshProUGUI targetFishTMP;
@@ -29,7 +32,8 @@ public class LevelManager : MonoBehaviour
     private GameObject targetObs;
     private GameObject targetFish;
 
-
+    private GameObject levelItem;
+    private Vector2 levelPosition;
     private void Awake()
     {
         Instance = this;
@@ -39,7 +43,9 @@ public class LevelManager : MonoBehaviour
     {
         levels = Resources.LoadAll<GameObject>("levels");
         isWaiting = false;
+        loadLevelToUI();
     }
+
     void Update()
     {
         if (MainMenu.Instance.currentMode == 2)
@@ -53,15 +59,15 @@ public class LevelManager : MonoBehaviour
 
                 bool isFishDone = targetFishAmount == 0;
                 bool isObstacleDone = targetObstacleAmount == 0;
-                
+
                 if ((hasFish && !hasObstacle && isFishDone) ||
                     (!hasFish && hasObstacle && isObstacleDone) ||
                     (hasFish && hasObstacle && isFishDone && isObstacleDone))
                 {
                     isWaiting = true;
-                    Invoke("onWin", 2f);
+                    Invoke(nameof(onWin), 2f);
                 }
-                
+
             }
             else if (currentObj.CompareTag("timerLevel"))
             {
@@ -73,7 +79,7 @@ public class LevelManager : MonoBehaviour
                 if (targetFishAmount == 0)
                 {
                     isWaiting = true;
-                    Invoke("onWin", 2f);
+                    Invoke(nameof(onWin), 2f);
                 }
                 timerTMP.text = Mathf.CeilToInt(currentTime).ToString();
             }
@@ -81,9 +87,40 @@ public class LevelManager : MonoBehaviour
 
     }
 
+    void loadLevelToUI()
+    {
+        float[] positionXOptions = { 0f, -300f, 0f, 300f };
+        // load sample vào content
+        RectTransform contetnRect = ContentView.GetComponent<RectTransform>();
+        float contentHeight = levels.Length * 800 - 450 * 2;
+        contetnRect.sizeDelta = new Vector2(contetnRect.sizeDelta.x, contentHeight);
+
+        for (int i = 1; i <= levels.Length; i++)
+        {
+            int patternIndex;
+            if (i == 1)
+            {
+                patternIndex = 0;
+
+            } else {
+                patternIndex = i % 4;
+            }
+            float posX = positionXOptions[patternIndex];
+            float posY = -450f * i;
+
+            //load level index vào sample
+            LevelSampleText.text = i.ToString();
+            levelItem = Instantiate(LevelSample, ContentView.transform);
+            levelItem.name = i.ToString();
+            levelItem.SetActive(true);
+            //load position cho mỗi sample
+            levelPosition = new Vector2(posX, posY);
+            levelItem.GetComponent<RectTransform>().anchoredPosition = levelPosition;
+        }
+    }
     public void setObstacleAmount()
     {
-        
+
         if (!obs_list) return;
         int activeCount = 0;
 
@@ -94,7 +131,6 @@ public class LevelManager : MonoBehaviour
                 activeCount++;
             }
         }
-        Debug.Log("Số lượng obstacle đang active: " + activeCount);
         targetObstacleAmount = activeCount;
         targetObstacleTMP.text = targetObstacleAmount.ToString();
 
@@ -102,10 +138,9 @@ public class LevelManager : MonoBehaviour
 
     public void initData()
     {
-        Debug.Log("Helloo init");
         isWaiting = false;
-        gamePlay = levels[levelIndex].transform.Find("GamePlay");
-        //obs_list = levels[levelIndex].transform.Find("obs_list");
+        levelIndex = PlayerPrefsManager.GetCurrentLevel();
+        gamePlay = levels[levelIndex-1].transform.Find("GamePlay");
         obs_list = currentObj.transform.Find("obs_list");
         if (obs_list)
         {
@@ -148,21 +183,19 @@ public class LevelManager : MonoBehaviour
         // dùng ... để kiểm tra logic breakableObs để --number -> xử lý logic win/lose
         //Tìm obstacle trong level để hiển thị lên target
         GameObject foundObstacle = null;
-       
+
         if (obs_list)
         {
+            // Tìm xem có gameobject nào là obs không, có thì hiển thị lên UI.
             foreach (Transform child in obs_list)
             {
                 foundObstacle = child.gameObject;
-                Debug.Log("OKEEEE");
                 break;
             }
 
+            // Hiển thị obs lên UI (làm đỡ)
             if (foundObstacle)
             {
-                Debug.Log("Parent of BreakableObstacle: " + GameObject.FindWithTag("BreakableObstacle").transform.parent.name);
-                Debug.Log("current level: " + currentObj.name);
-
                 targetObs = Instantiate(foundObstacle);
                 if (targetObs)
                 {
@@ -173,14 +206,13 @@ public class LevelManager : MonoBehaviour
                     Destroy(obs_rb);
                     targetObstacleTMP.text = listParent.GetChild(2).name;
                     targetObstacleAmount = int.Parse(listParent.GetChild(2).name);
-                    Debug.Log("asdsadsa:" + obstacleList.Count);
                 }
             }
         }
-        
 
 
 
+        // Hiển thị UI của move level
         if (currentObj.CompareTag("moveLevel"))
         {
             // move level
@@ -190,9 +222,8 @@ public class LevelManager : MonoBehaviour
             stepMoveText.text = gamePlay.GetChild(0).name;
             GameManager.Instance.step = int.Parse(stepMoveText.text);
 
-            Debug.Log("Move level: \n stepmove: " + stepMoveText.text + "\n instance: " + GameManager.Instance.step);
-
         }
+        //Hiển thị Ui của timerlevel
         else if (currentObj.CompareTag("timerLevel"))
         {
             // timer level
@@ -216,22 +247,28 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public void restartLevel()
     {
+        //Xóa level hiện tại
         if (currentObj)
         {
             Destroy(currentObj);
         }
+        //Nếu hết level thì quay lại level 1 (làm đỡ)
         if (levelIndex >= levels.Length)
         {
-            levelIndex = 0;
-            MainMenu.Instance.levelIndex = levelIndex;
+            PlayerPrefsManager.SetCurrentLevel(1);
         }
-        currentObj = Instantiate(levels[MainMenu.Instance.levelIndex]);
-        //Clear fish pool
+        //Instantiate lại level hiện tại
+        currentObj = Instantiate(levels[PlayerPrefsManager.GetCurrentLevel() - 1]);
+        //Xóa pool
         FishPooler.Instance.ClearPool();
         //Get fish đầu tiên
         CancelInvoke(nameof(finishGame));
+        //restart lại trạng thái
         GameManager.Instance.restartGameAdventure();
+        //Khởi tạo lại data
         initData();
+
+        //Handle lỗi invoke
         if (!GameManager.Instance.isCancleDelayDrop)
         {
             Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(PlayerController.waterWidth, PlayerController.waterHeight, 10));
@@ -239,21 +276,33 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    //Handle next level
     public void onLoadNextLevel()
     {
+        //++ tiền
         GameManager.Instance.setCoinText(50);
-        levelIndex++;
-        MainMenu.Instance.levelIndex = levelIndex;
+        // tăng level
+        if (PlayerPrefsManager.GetCurrentLevel() < PlayerPrefsManager.GetUnLockedLevel())
+        {
+            levelIndex = PlayerPrefsManager.GetCurrentLevel();
+            PlayerPrefsManager.SetCurrentLevel(levelIndex + 1);
+        } else
+        {
+            levelIndex = PlayerPrefsManager.GetUnLockedLevel();
+            PlayerPrefsManager.SetUnLockedLevel(levelIndex + 1);
+            PlayerPrefsManager.SetCurrentLevel(PlayerPrefsManager.GetUnLockedLevel());
+        }
+            
+
         if (currentObj)
         {
             Destroy(currentObj);
         }
         if (levelIndex >= levels.Length)
         {
-            levelIndex = 0;
-            MainMenu.Instance.levelIndex = levelIndex;
+            PlayerPrefsManager.SetCurrentLevel(1);
         }
-        currentObj = Instantiate(levels[MainMenu.Instance.levelIndex]);
+        currentObj = Instantiate(levels[PlayerPrefsManager.GetCurrentLevel() - 1]);
         CancelInvoke(nameof(onWin));
         //Clear fish pool
         FishPooler.Instance.ClearPool();
@@ -290,7 +339,7 @@ public class LevelManager : MonoBehaviour
                 if (GameManager.Instance.step == 0)
                 {
                     isWaiting = true;
-                    Invoke("finishGame", 3f);
+                    Invoke(nameof(finishGame), 3f);
                 }
             }
             else if (currentObj.CompareTag("timerLevel"))
@@ -298,7 +347,7 @@ public class LevelManager : MonoBehaviour
                 if (currentTime == 0)
                 {
                     isWaiting = true;
-                    Invoke("finishGame", 3f);
+                    Invoke(nameof(finishGame), 3f);
                 }
             }
         }
@@ -309,18 +358,14 @@ public class LevelManager : MonoBehaviour
     }
     void finishGame()
     {
-        
+
         if (targetFishAmount == 0 && targetObstacleAmount == 0)
         {
-            Debug.Log("AMOUNT:" + targetObstacleAmount + ":::" + targetFishAmount);
             GameManager.Instance.onWinAdventure();
-            Debug.Log("Winnn");
-            
         }
         else
         {
             GameManager.Instance.onLoseAdventure();
-            Debug.Log("AMOUNT:" + targetObstacleAmount + ":::" + targetFishAmount);
         }
     }
     private int GetFishLevel(string tag)
@@ -328,5 +373,6 @@ public class LevelManager : MonoBehaviour
         string[] parts = tag.Split('_');
         return int.Parse(parts[1]) - 1;
     }
+
 
 }

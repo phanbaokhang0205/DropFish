@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static UnityEngine.GraphicsBuffer;
 
-public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Hammer : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
 {
     private Vector3 initPosition;
     private Vector3 touchPosition;
@@ -24,11 +24,10 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
 
     void Update()
     {
-
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        //flat = GameManager.Instance.isAvailableCoin(price);
+        flat = GameManager.Instance.isAvailableCoin(price);
         if (!flat) return;
         else
         {
@@ -37,14 +36,9 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
 
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-
-    }
-
     public void OnDrag(PointerEventData eventData)
     {
-        //flat = GameManager.Instance.isAvailableCoin(price);
+        flat = GameManager.Instance.isAvailableCoin(price);
 
         // Lấy vị trí
         if (!flat) return;
@@ -56,21 +50,6 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDr
         }
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.tag.StartsWith("fish"))
-    //    {
-    //        if(target && fishScript)
-    //        {
-    //            Debug.Log("Xoas target: " + target.tag);
-    //            fishScript.StopFlash();
-    //            target = null;
-    //            fishScript = null;
-    //        }
-    //        target = other.gameObject;
-    //        Debug.Log("Laay tarrget:" + target.tag);
-    //    }
-    //}
     private void OnTriggerStay(Collider other)
     {
         if (!other.tag.StartsWith("fish")) return;
