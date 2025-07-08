@@ -20,7 +20,7 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
     {
         initPosition = transform.position;
         initBombGridPosition = BombGrid.transform.position;
-        price = int.Parse(priceTMP.text); 
+        price = int.Parse(priceTMP.text);
         flat = GameManager.Instance.isAvailableCoin(price);
     }
 
@@ -30,10 +30,11 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
     }
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
         GameManager.Instance.CurrentState = GameManager.GameState.onChosen;
     }
 
-    
+
     public void OnBeginDrag(PointerEventData eventData)
     {
 
@@ -56,18 +57,16 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        //Xóa cá
-        transform.position = initPosition;
-        BombGrid.transform.position = initBombGridPosition;
         GameManager.Instance.CurrentState = GameManager.GameState.Playing;
-
+        //Xóa cá
+        //explore(5f, 10f);
         if (fishList.Count != 0)
         {
-            Debug.Log("Xóaaa");
             foreach (GameObject fish in fishList)
             {
                 fish.SetActive(false);
             }
+            CameraScript.Instance.shake();
             fishList.Clear();
             if (!flat) return;
             else
@@ -81,9 +80,51 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
         }
 
         //Trừ tiền
-        
-        GameManager.Instance.delayState();
+        GameManager.Instance.delayState(0.1f);
+        transform.position = initPosition;
+        BombGrid.transform.position = initBombGridPosition;
     }
+
+    //void explore(float radius, float power)
+    //{
+    //    Vector3 explosionPos = BombGrid.transform.position;
+    //    Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
+    //    foreach (Collider hit in colliders)
+    //    {
+    //        Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+    //        if (rb != null)
+    //        {
+    //            rb.AddExplosionForce(power, explosionPos, radius, 1f, ForceMode.Impulse);
+    //            Debug.Log("ke");
+    //        }
+    //        Debug.DrawLine(explosionPos, hit.transform.position, Color.red, 1f);
+
+    //    }
+    //}
+    //void explore(float radius, float power)
+    //{
+    //    Vector3 explosionPos = BombGrid.transform.position;
+    //    Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
+
+    //    foreach (Collider hit in colliders)
+    //    {
+    //        Rigidbody rb = hit.attachedRigidbody;
+    //        if (rb != null)
+    //        {
+    //            rb.AddExplosionForce(power, explosionPos, radius, 0.1f, ForceMode.Impulse);
+
+    //            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 3f); // giới hạn vận tốc
+
+    //            rb.linearDamping = 2f;
+    //            rb.angularDamping = 2f;
+
+    //            Debug.DrawLine(explosionPos, hit.transform.position, Color.red, 1f);
+    //            Debug.Log(hit.name);
+    //        }
+    //    }
+    //}
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag.StartsWith("fish"))

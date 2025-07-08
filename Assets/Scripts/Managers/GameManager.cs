@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         CurrentState = GameState.Playing;
         PauseCanvasAdventure.SetActive(false);
-        delayState();
+        delayState(0.1f);
     }
 
     public void onWinNormal()
@@ -305,14 +305,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         CurrentState = GameState.Playing;
         PauseCanvasNormal.SetActive(false);
-        delayState();
+        delayState(0.1f);
     }
 
     public void onNextLevelAdventure()
     {
         CurrentState = GameState.Playing;
         WinCanvasAdventure.SetActive(false);
-        delayState();
+        delayState(0.1f);
     }
 
     public void restartGameAdventure()
@@ -324,7 +324,7 @@ public class GameManager : MonoBehaviour
         CurrentState = GameState.Playing;
         LoseCanvasAdventure.SetActive(false);
         PauseCanvasAdventure.SetActive(false);
-        delayState();
+        delayState(0.1f);
     }
 
     public void restartGameNormal()
@@ -339,10 +339,10 @@ public class GameManager : MonoBehaviour
         step -= 1;
     }
 
-    public void delayState()
+    public void delayState(float time)
     {
         CurrentState = GameState.onChosen;
-        Invoke(nameof(deplayStateInvoke), 0.1f);
+        Invoke(nameof(deplayStateInvoke), time);
     }
     private void deplayStateInvoke()
     {

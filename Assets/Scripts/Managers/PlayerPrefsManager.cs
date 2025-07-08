@@ -100,27 +100,25 @@ public static class PlayerPrefsManager
         return PlayerPrefs.GetInt(CoinKey, 0);
     }
     /// <summary>
-
-    /// 1 Nếu có 100 level thì load ra ntn ?
-    ///     - Load level lên UI bằng resource.loadAll()
-    ///         + Lấy Content;
-    ///         + Lấy levelSample;
-    ///         + Dựa vào levelSample và levels[] -> tách name của levels.child sau đó đưa vào text của levelSample
+    ////Done
+    //// 1 Nếu có 100 level thì load ra ntn ?
+    ////     - Load level lên UI bằng resource.loadAll()
+    ////         + Lấy Content;
+    ////         + Lấy levelSample;
     ///     
-    /// 2. Cách load level theo kiểu ziczac
-    ///     - Dùng loop để load từ dưới lên vào content
+    //// /2. Cách load level theo kiểu ziczac
+    ////     - Dùng loop để load từ dưới lên vào content
     ///     
-    /// 3 Tạo playerPref cho Level để lưu currentLevel
-    /// - 
-    /// => Chuyển LevelManager.Instance.levelIndex = GetCurrentLevel();
-    /// => Click vào level(int) -> gọi SetCurrentLevel(int).
-    /// => Click vào PlayAdventure -> gọi PlayAdventureMode();
+    //// 3 Tạo playerPref cho Level để lưu currentLevel
+    //// => Chuyển LevelManager.Instance.levelIndex = GetCurrentLevel();
+    //// => Click vào level(int) -> gọi SetCurrentLevel(int).
+    //// => Click vào PlayAdventure -> gọi PlayAdventureMode();
     /// 
-    /// 4 Lưu level ở đâu ?
-    ///     - Lưu currentLevel ở playerPref.
-    ///     - Chỉ enable các level đã chơi.
-    ///         + default disable button level.
-    ///         + default currentLevel = 1;
+    //// 4 Lưu level ở đâu ?
+    ////     - Lưu currentLevel ở playerPref.
+    ////     - Chỉ enable các level đã chơi.
+    ////         + default disable button level.
+    ////         + default currentLevel = 1;
     /// </summary>
     public static void SetUnLockedLevel(int level)
     {

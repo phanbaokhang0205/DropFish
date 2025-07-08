@@ -274,6 +274,7 @@ public class LevelManager : MonoBehaviour
             Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(PlayerController.waterWidth, PlayerController.waterHeight, 10));
             FishManager.Instance.CreateFish(touchPosition);
         }
+        PlayerController.Instance.setLinePosition();
     }
 
     //Handle next level

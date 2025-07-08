@@ -293,9 +293,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashAlpha: 130
   flashInterval: 0.2
+  breakableObs: []
   inWater: 0
   isDropped: 0
-  isMerge: 0
+  isDataOfLevel: 0
 --- !u!95 &-8590439194877735728
 Animator:
   serializedVersion: 7

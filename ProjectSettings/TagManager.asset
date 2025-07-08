@@ -32,6 +32,7 @@ TagManager:
   - BreakableObstacle
   - StaticObstacle
   - numerTarget
+  - mergeSplash
   layers:
   - Default
   - TransparentFX

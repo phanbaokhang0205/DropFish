@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class Shake : MonoBehaviour, IPointerClickHandler
 {
 
     [SerializeField] GameObject fishTank;
-    [SerializeField] float forceAmount = 3f;
+    [SerializeField] float forceAmount;
     [SerializeField] TextMeshProUGUI priceTMP;
     int price;
     bool flat;
@@ -24,7 +25,7 @@ public class Shake : MonoBehaviour, IPointerClickHandler
 
     void Update()
     {
-
+        Debug.Log(GameManager.Instance.CurrentState);
     }
 
 
@@ -34,12 +35,37 @@ public class Shake : MonoBehaviour, IPointerClickHandler
 
         if (!isShaking && flat)
         {
-            rb.AddForce(Vector3.right * forceAmount, ForceMode.Impulse);
-            GameManager.Instance.delayState();
+            //rb.AddForce(Vector3.right * forceAmount, ForceMode.Impulse);
+            GameManager.Instance.delayState(2.6f);
             isShaking = true;
-            
+
+            //Invoke(nameof(deplayShake), 2);
             GameManager.Instance.setCoinText(-price);
-            Invoke(nameof(deplayShake), 2);
+
+
+            // Tạo sequence tween
+            Sequence camSeq = DOTween.Sequence();
+
+            camSeq.AppendCallback(() =>
+            {
+                CameraScript.Instance.zoomOut();
+            });
+
+            camSeq.AppendInterval(0.5f);
+
+            camSeq.AppendCallback(() =>
+            {
+                rb.AddForce(Vector3.right * forceAmount, ForceMode.Impulse);
+            });
+
+            camSeq.AppendInterval(2f);
+
+            camSeq.AppendCallback(() =>
+            {
+                CameraScript.Instance.zoomIn();
+                Invoke(nameof(deplayShake), 2);
+            });
+
         }
     }
 

@@ -17,6 +17,7 @@ public class FishPooler : MonoBehaviour
 
     private GameObject nextFish;
     public Transform FishPool;
+    public Transform NextFish;
 
     private void Awake()
     {
@@ -44,7 +45,7 @@ public class FishPooler : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             initalFishes[i] = new Queue<GameObject>();
-            GameObject fish = Instantiate(fishPrefabs[i], FishPool);
+            GameObject fish = Instantiate(fishPrefabs[i], NextFish);
             fish.SetActive(false);
             initalFishes[i].Enqueue(fish);
         }

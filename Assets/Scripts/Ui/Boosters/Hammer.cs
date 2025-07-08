@@ -27,6 +27,8 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDrag
     }
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
+
         flat = GameManager.Instance.isAvailableCoin(price);
         if (!flat) return;
         else
@@ -38,6 +40,7 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDrag
 
     public void OnDrag(PointerEventData eventData)
     {
+
         flat = GameManager.Instance.isAvailableCoin(price);
 
         // Lấy vị trí
@@ -91,7 +94,7 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDrag
             }
         }
         
-        GameManager.Instance.delayState();
+        GameManager.Instance.delayState(0.1f);
     }
 
 

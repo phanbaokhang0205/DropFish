@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 
 public class Fish : MonoBehaviour
@@ -17,9 +15,12 @@ public class Fish : MonoBehaviour
     [SerializeField] List<GameObject> breakableObs = new List<GameObject>();
 
     public bool inWater;
-    public bool isDropped;
+    [SerializeField] public bool isDropped;
+    [SerializeField] public bool isJustMerge;
+
     public bool isDataOfLevel = false;
     ParticleSystem splashEffect;
+    ParticleSystem mergeSplashEffect;
     bool isFlashing;
 
 
@@ -29,12 +30,13 @@ public class Fish : MonoBehaviour
         fishRb.mass = 0;
         fishManager = FishManager.Instance;
 
-
         splashEffect = GameObject.FindGameObjectWithTag("splash").GetComponent<ParticleSystem>();
-        
+        mergeSplashEffect = GameObject.FindGameObjectWithTag("mergeSplash").GetComponent<ParticleSystem>();
+
         smr = GetComponentInChildren<SkinnedMeshRenderer>();
         mats = smr.materials;
         isFlashing = false;
+
     }
 
     void Update()
@@ -63,6 +65,7 @@ public class Fish : MonoBehaviour
         inWater = false;
         isDropped = false;
         fishRb.useGravity = false;
+        isJustMerge = false;
         transform.rotation = Quaternion.Euler(0, 90, 0);
         fishRb.constraints =
             RigidbodyConstraints.FreezePositionX |
@@ -88,18 +91,9 @@ public class Fish : MonoBehaviour
     {
         if (breakableObs.Count != 0)
         {
-            //Debug.Log("Fish: " + tag + ", total = " + breakableObs.Count);
             foreach (GameObject obs in breakableObs)
             {
-                //Debug.Log(obs.name);
                 obs.SetActive(false);
-                //LevelManager.Instance.targetObstacleAmount--;
-                //Debug.LogError("ádasdasdasasdasđ");
-                //if (LevelManager.Instance.targetObstacleAmount < 0)
-                //{
-                //    LevelManager.Instance.targetObstacleAmount = 0;
-                //}
-                //LevelManager.Instance.targetObstacleTMP.text = LevelManager.Instance.targetObstacleAmount.ToString();
             }
             breakableObs.Clear();
         }
@@ -116,7 +110,15 @@ public class Fish : MonoBehaviour
             {
                 dropped();
             }
-            setsplashEffect();
+            if (!isJustMerge)
+            {
+                setsplashEffect(splashEffect);
+                AudioManager.Instance.PlayWaterDrop();
+            }
+            else {
+                setsplashEffect(mergeSplashEffect);
+            }
+
         }
 
         if (other.gameObject.tag == "test_1")
@@ -146,15 +148,14 @@ public class Fish : MonoBehaviour
         if (collision.gameObject.tag == "BreakableObstacle")
         {
             breakableObs.Remove(collision.gameObject);
-            
+
         }
     }
 
-    void setsplashEffect()
+    void setsplashEffect(ParticleSystem effect)
     {
-        splashEffect.transform.position = transform.position;
-        splashEffect.Play();
-        AudioManager.Instance.PlayWaterDrop();
+        effect.transform.position = transform.position;
+        effect.Play();
     }
     public void StartFlash()
     {
