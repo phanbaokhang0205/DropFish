@@ -66,14 +66,15 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
         GameManager.Instance.CurrentState = GameManager.GameState.Playing;
         //Xóa cá
-        explore(10f, 7f);
         if (fishList.Count != 0)
         {
             foreach (GameObject fish in fishList)
             {
+                fish.GetComponent<Fish>().StopFlash();
                 fish.SetActive(false);
             }
             CameraScript.Instance.shake();
+            explore(5f, 10f);
             fishList.Clear();
             if (!flat) return;
             else

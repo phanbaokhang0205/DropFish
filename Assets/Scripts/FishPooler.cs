@@ -46,6 +46,7 @@ public class FishPooler : MonoBehaviour
         {
             initalFishes[i] = new Queue<GameObject>();
             GameObject fish = Instantiate(fishPrefabs[i], NextFish);
+            fish.GetComponent<Rigidbody>().isKinematic = true;
             fish.SetActive(false);
             initalFishes[i].Enqueue(fish);
         }

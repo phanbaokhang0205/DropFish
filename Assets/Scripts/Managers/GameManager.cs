@@ -316,7 +316,6 @@ public class GameManager : MonoBehaviour
         }
         CurrentState = GameState.Playing;
         LoseCanvasAdventure.SetActive(false);
-        PauseCanvasAdventure.SetActive(false);
         delayState(0.1f);
     }
 

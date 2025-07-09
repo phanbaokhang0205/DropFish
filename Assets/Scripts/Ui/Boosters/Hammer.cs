@@ -86,9 +86,10 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDrag
         transform.position = initPosition;
         if (target)
         {
-            target.SetActive(false);
             fishScript = target.GetComponent<Fish>();
             fishScript.StopFlash();
+            target.SetActive(false);
+            
 
             if (!flat) return;
             else

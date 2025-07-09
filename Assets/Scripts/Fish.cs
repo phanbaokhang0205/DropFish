@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ public class Fish : MonoBehaviour
     ParticleSystem splashEffect;
     ParticleSystem mergeSplashEffect;
     bool isFlashing;
+    private Tween flashTween;
 
 
     void Start()
@@ -50,6 +52,7 @@ public class Fish : MonoBehaviour
             if (transform.position.y < -5)
             {
                 GameManager.Instance.onLoseNormal();
+                GameManager.Instance.onLoseAdventure();
             }
 
             if (gameObject.tag == "fish_11")
@@ -157,12 +160,24 @@ public class Fish : MonoBehaviour
         effect.transform.position = transform.position;
         effect.Play();
     }
+
     public void StartFlash()
     {
         if (!isFlashing && mats.Length > 1)
         {
             isFlashing = true;
-            flashCoroutine = StartCoroutine(FlashEffect());
+
+            Material mat1 = mats[1];
+
+            // Tạo tween alpha lặp lại
+            flashTween = DOTween.ToAlpha(
+                () => mat1.color,
+                x => mat1.color = x,
+                flashAlpha,
+                flashInterval
+            )
+            .SetLoops(-1, LoopType.Yoyo) // Lặp vô hạn, qua lại
+            .SetEase(Ease.Linear);       // Giữ tốc độ đều
         }
     }
 
@@ -171,33 +186,18 @@ public class Fish : MonoBehaviour
         if (isFlashing)
         {
             isFlashing = false;
-            if (flashCoroutine != null)
+
+            if (flashTween != null && flashTween.IsActive())
             {
-                StopCoroutine(flashCoroutine);
+                flashTween.Kill();
             }
 
-            // Reset alpha về giá trị ban đầu
+            // Reset alpha về 0
             Material mat1 = mats[1];
             Color color = mat1.color;
             color.a = 0f;
             mat1.color = color;
         }
     }
-
-    IEnumerator FlashEffect()
-    {
-        Material mat1 = mats[1];
-        bool toggle = false;
-
-        while (isFlashing)
-        {
-            Color color = mat1.color;
-            color.a = toggle ? flashAlpha : 0.7f;
-            mat1.color = color;
-
-            toggle = !toggle;
-
-            yield return new WaitForSeconds(flashInterval);
-        }
-    }
+    
 }

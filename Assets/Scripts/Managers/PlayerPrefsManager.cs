@@ -97,7 +97,7 @@ public static class PlayerPrefsManager
 
     public static int GetCoin()
     {
-        return PlayerPrefs.GetInt(CoinKey, 0);
+        return PlayerPrefs.GetInt(CoinKey, 99999);
     }
    
     public static void SetUnLockedLevel(int level)

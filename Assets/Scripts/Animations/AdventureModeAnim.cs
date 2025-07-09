@@ -27,6 +27,8 @@ public class AdventureModeAnim : MonoBehaviour
 
     public void handleSetting()
     {
+        GameManager.Instance.delayState(0.1f);
+
         isOpenSetting = !isOpenSetting;
         if (isOpenSetting)
         {
@@ -42,5 +44,12 @@ public class AdventureModeAnim : MonoBehaviour
             GameManager.Instance.onResumeAdventure();
             MainMenu.Instance.handleSettingAnim(isOpenSetting, panel_rt, frame_rt, panel_image);
         }
+    }
+
+    public void handleRestartGame()
+    {
+        isOpenSetting = !isOpenSetting;
+        MainMenu.Instance.handleSettingAnim(isOpenSetting, panel_rt, frame_rt, panel_image);
+        LevelManager.Instance.restartLevel();
     }
 }

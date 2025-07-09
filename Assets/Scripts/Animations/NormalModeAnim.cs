@@ -27,6 +27,8 @@ public class NormalModeAnim : MonoBehaviour
 
     public void handleSetting()
     {
+        GameManager.Instance.delayState(0.1f);
+
         isOpenSetting = !isOpenSetting;
         if (isOpenSetting)
         {
