@@ -27,19 +27,20 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDrag
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
+        //if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
 
-        flat = GameManager.Instance.isAvailableCoin(price);
-        if (!flat) return;
-        else
-        {
-            GameManager.Instance.CurrentState = GameManager.GameState.onChosen;
-        }
+        //flat = GameManager.Instance.isAvailableCoin(price);
+        //if (!flat) return;
+        //else
+        //{
+        //    GameManager.Instance.CurrentState = GameManager.GameState.onChosen;
+        //}
 
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
 
         flat = GameManager.Instance.isAvailableCoin(price);
 

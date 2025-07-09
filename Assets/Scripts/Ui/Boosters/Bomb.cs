@@ -31,7 +31,7 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
     public void OnPointerDown(PointerEventData eventData)
     {
         if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
-        GameManager.Instance.CurrentState = GameManager.GameState.onChosen;
+        //GameManager.Instance.CurrentState = GameManager.GameState.onChosen;
     }
 
 
@@ -42,6 +42,8 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
+
         flat = GameManager.Instance.isAvailableCoin(price);
         //lấy vị trí
         if (!flat) return;
@@ -59,7 +61,7 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
     {
         GameManager.Instance.CurrentState = GameManager.GameState.Playing;
         //Xóa cá
-        //explore(5f, 10f);
+        explore(10f, 7f);
         if (fishList.Count != 0)
         {
             foreach (GameObject fish in fishList)
@@ -85,23 +87,25 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
         BombGrid.transform.position = initBombGridPosition;
     }
 
-    //void explore(float radius, float power)
-    //{
-    //    Vector3 explosionPos = BombGrid.transform.position;
-    //    Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
-    //    foreach (Collider hit in colliders)
-    //    {
-    //        Rigidbody rb = hit.GetComponent<Rigidbody>();
+    void explore(float radius, float power)
+    {
+        Vector3 explosionPos = BombGrid.transform.position;
+        Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
+        foreach (Collider hit in colliders)
+        {
+            Rigidbody rb = hit.GetComponent<Rigidbody>();
 
-    //        if (rb != null)
-    //        {
-    //            rb.AddExplosionForce(power, explosionPos, radius, 1f, ForceMode.Impulse);
-    //            Debug.Log("ke");
-    //        }
-    //        Debug.DrawLine(explosionPos, hit.transform.position, Color.red, 1f);
+            if (rb != null)
+            {
+                rb.mass = 1;
+                rb.AddExplosionForce(power, explosionPos, radius, 1f, ForceMode.Impulse);
+                rb.mass = 0;
+                Debug.Log("ke");
+            }
+            Debug.DrawLine(explosionPos, hit.transform.position, Color.red, 1f);
 
-    //    }
-    //}
+        }
+    }
     //void explore(float radius, float power)
     //{
     //    Vector3 explosionPos = BombGrid.transform.position;

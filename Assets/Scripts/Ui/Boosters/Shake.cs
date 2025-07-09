@@ -36,7 +36,7 @@ public class Shake : MonoBehaviour, IPointerClickHandler
         if (!isShaking && flat)
         {
             //rb.AddForce(Vector3.right * forceAmount, ForceMode.Impulse);
-            GameManager.Instance.delayState(2.6f);
+            GameManager.Instance.delayState(3f);
             isShaking = true;
 
             //Invoke(nameof(deplayShake), 2);
