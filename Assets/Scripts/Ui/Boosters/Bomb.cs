@@ -30,35 +30,40 @@ public class Bomb : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
+        //if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
         //GameManager.Instance.CurrentState = GameManager.GameState.onChosen;
     }
 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
 
-        flat = GameManager.Instance.isAvailableCoin(price);
-        //lấy vị trí
-        if (!flat) return;
         else
         {
-            touch = Input.GetTouch(0);
-            touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 1));
-            transform.position = touchPosition;
+            flat = GameManager.Instance.isAvailableCoin(price);
+            //lấy vị trí
+            if (!flat) return;
+            else
+            {
+                touch = Input.GetTouch(0);
+                touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 1));
+                transform.position = touchPosition;
 
-            BombGrid.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+                BombGrid.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+            }
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
+
+
         GameManager.Instance.CurrentState = GameManager.GameState.Playing;
         //Xóa cá
         explore(10f, 7f);

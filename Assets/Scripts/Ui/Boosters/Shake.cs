@@ -25,7 +25,6 @@ public class Shake : MonoBehaviour, IPointerClickHandler
 
     void Update()
     {
-        Debug.Log(GameManager.Instance.CurrentState);
     }
 
 
@@ -35,13 +34,10 @@ public class Shake : MonoBehaviour, IPointerClickHandler
 
         if (!isShaking && flat)
         {
-            //rb.AddForce(Vector3.right * forceAmount, ForceMode.Impulse);
             GameManager.Instance.delayState(3f);
             isShaking = true;
 
-            //Invoke(nameof(deplayShake), 2);
             GameManager.Instance.setCoinText(-price);
-
 
             // Tạo sequence tween
             Sequence camSeq = DOTween.Sequence();

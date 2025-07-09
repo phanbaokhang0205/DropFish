@@ -3,12 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-/// <summary>
-/// - obstacle bug
-/// - claim coin bug
-/// - set fish line bug
-/// - booster cost bug
-/// </summary>
+
 public class GameManager : MonoBehaviour
 {
 
@@ -268,14 +263,12 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         CurrentState = GameState.Pause;
-        PauseCanvasAdventure.SetActive(true);
     }
 
     public void onResumeAdventure()
     {
         Time.timeScale = 1f;
         CurrentState = GameState.Playing;
-        PauseCanvasAdventure.SetActive(false);
         delayState(0.1f);
     }
 
@@ -297,14 +290,14 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         CurrentState = GameState.Pause;
-        PauseCanvasNormal.SetActive(true);
+        //PauseCanvasNormal.SetActive(true);
     }
 
     public void onResumeNormal()
     {
         Time.timeScale = 1f;
         CurrentState = GameState.Playing;
-        PauseCanvasNormal.SetActive(false);
+        //PauseCanvasNormal.SetActive(false);
         delayState(0.1f);
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,12 +13,16 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject AdventureScreen;
     [SerializeField] GameObject StoreScreen;
     [SerializeField] GameObject SettingScreen;
+    [SerializeField] GameObject panel_SettingScreen;
+    [SerializeField] GameObject frame_SettingScreen;
     [SerializeField] TextMeshProUGUI[] levels;
 
     [SerializeField] GameObject StartGameUI;
     [SerializeField] GameObject NormalMode;
     [SerializeField] GameObject AdventureMode;
-
+    RectTransform panel_rt;
+    RectTransform frame_rt;
+    Image panel_image;
     public int currentMode;
 
     private bool openSetting;
@@ -25,6 +30,13 @@ public class MainMenu : MonoBehaviour
     {
         Instance = this;
         openSetting = false;
+    }
+
+    private void Start()
+    {
+        panel_rt = panel_SettingScreen.GetComponent<RectTransform>();
+        frame_rt = frame_SettingScreen.GetComponent<RectTransform>();
+        panel_image = panel_SettingScreen.GetComponent<Image>();
     }
 
     public void PlayNormalMode()
@@ -113,9 +125,30 @@ public class MainMenu : MonoBehaviour
     public void handleSetting()
     {
         openSetting = !openSetting;
-        SettingScreen.SetActive(openSetting);
+        handleSettingAnim(openSetting, panel_rt, frame_rt, panel_image);
     }
 
+    public Sequence handleSettingAnim(bool isOpen, RectTransform panel, RectTransform frame, Image image)
+    {
+        Sequence settingSeq = DOTween.Sequence();
+        if (isOpen)
+        {
+            settingSeq
+            .Append(panel.DOAnchorPos(new Vector2(0f, panel.anchoredPosition.y), 0f))
+            .Join(image.DOFade(0.7f, 0.3f))
+            .Join(frame.DOAnchorPos(new Vector2(0f, frame.anchoredPosition.y), 0.4f));
+        }
+        else
+        {
+            settingSeq
+            .Append(image.DOFade(0f, 0.3f))
+            .AppendInterval(0.1f)
+            .Append(frame.DOAnchorPos(new Vector2(1000f, frame.anchoredPosition.y), 0.4f))
+            .Join(panel.DOAnchorPos(new Vector2(1000f, panel.anchoredPosition.y), 0.2f));
+        }
+
+        return settingSeq;
+    }
     //public void getLevelIndex(TextMeshProUGUI uiText)
     //{
     //    string textValue = uiText.text;

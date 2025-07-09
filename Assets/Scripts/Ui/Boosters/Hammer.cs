@@ -81,6 +81,8 @@ public class Hammer : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDrag
     }
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (GameManager.Instance.CurrentState == GameManager.GameState.onChosen) return;
+
         transform.position = initPosition;
         if (target)
         {
